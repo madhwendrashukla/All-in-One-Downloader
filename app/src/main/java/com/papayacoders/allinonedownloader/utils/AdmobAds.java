@@ -23,8 +23,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.papayacoders.allinonedownloader.MainActivity;
 import com.papayacoders.allinonedownloader.R;
-import com.papayacoders.allinonedownloader.WhatsappDownloader.Activity.WhatsappActivity;
-import com.papayacoders.allinonedownloader.WhatsappDownloader.Activity.WhatsappActivityMain;
+
 
 public class AdmobAds {
 

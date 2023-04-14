@@ -64,8 +64,7 @@ public class BrowserManager extends VDFragment {
 
     public void newWindow(String url) {
         if(blockedWebsites.contains(Utils.getBaseDomain(url))){
-            Intent intent  = new Intent(getContext(),YTDownloadActivity.class);
-            startActivity(intent);
+
         }
         else {
             Bundle data = new Bundle();

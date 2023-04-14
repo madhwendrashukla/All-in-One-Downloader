@@ -20,7 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.papayacoders.allinonedownloader.MainActivity;
 import com.papayacoders.allinonedownloader.R;
 import com.papayacoders.allinonedownloader.VDFragment;
-import com.papayacoders.allinonedownloader.download_feature.DownloadManager;
+import com.papayacoders.allinonedownloader.download_feature.DownloadManager1;
 import com.papayacoders.allinonedownloader.download_feature.Tracking;
 import com.papayacoders.allinonedownloader.utils.Utils;
 
@@ -240,14 +240,14 @@ public class Downloads extends VDFragment implements MainActivity.OnBackPressedL
 
         @Override
         public void run() {
-            long downloadSpeedValue = DownloadManager.getDownloadSpeed();
+            long downloadSpeedValue = DownloadManager1.getDownloadSpeed();
             String downloadSpeedText = "Speed:" + Formatter.formatShortFileSize(getActivity(),
                     downloadSpeedValue) + "/s";
 
             downloadSpeed.setText(downloadSpeedText);
 
             if (downloadSpeedValue > 0) {
-                long remainingMills = DownloadManager.getRemaining();
+                long remainingMills = DownloadManager1.getRemaining();
                 String remainingText = "Remaining:" + Utils.getHrsMinsSecs(remainingMills);
                 remaining.setText(remainingText);
             } else {

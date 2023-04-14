@@ -13,7 +13,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.papayacoders.allinonedownloader.WhatsappDownloader.Activity.WhatsappActivity;
-import com.papayacoders.allinonedownloader.WhatsappDownloader.Activity.WhatsappActivityMain;
+import com.papayacoders.allinonedownloader.browsing_feature.YTDownloadActivity;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class VideoSitesList extends RecyclerView.Adapter<VideoSitesList.VideoStr
         sites = new ArrayList<>();
         this.activity = activity;
         sites = new ArrayList<>();
-        sites.add(new Site(R.drawable.ic_youtube, R.color.instagram, "youtube", "https://m.youtube.com"));
+        sites.add(new Site(R.drawable.ic_youtube, R.color.instagram, "Youtube", "https://m.youtube.com"));
         sites.add(new Site(R.drawable.ic_facebook, R.color.facebook, "Facebook", "https://m.facebook.com"));
 //        sites.add(new Site(R.drawable.favicon_dailymotion,R.color.dailymotion, "Dailymotion", "https://www" +
 //                ".dailymotion.com"));
@@ -109,8 +110,11 @@ public class VideoSitesList extends RecyclerView.Adapter<VideoSitesList.VideoStr
                         intent.putExtra("which", "WB");
                         activity.startActivity(intent);
 
-                    } else {
-                        //Set url in search bar
+                    } else if (sites.get(getAdapterPosition()).title.equals("Youtube")){
+                        Intent intent  = new Intent(activity, YTDownloadActivity.class);
+                        activity.startActivity(intent);
+
+                    }else {
                         EditText search = activity.findViewById(R.id.et_search_bar);
                         CardView cardView = activity.findViewById(R.id.cardView);
                         cardView.setVisibility(View.GONE);

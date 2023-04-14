@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.papayacoders.allinonedownloader.R;
 import com.papayacoders.allinonedownloader.VDFragment;
-import com.papayacoders.allinonedownloader.download_feature.DownloadManager;
+import com.papayacoders.allinonedownloader.download_feature.DownloadManager1;
 import com.papayacoders.allinonedownloader.download_feature.DownloadPermissionHandler;
 import com.papayacoders.allinonedownloader.download_feature.DownloadVideo;
 import com.papayacoders.allinonedownloader.download_feature.OnDownloadWithNewLinkListener;
@@ -45,7 +45,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DownloadsInProgress extends VDFragment implements DownloadManager.OnDownloadFinishedListener, DownloadManager.OnLinkNotFoundListener, OnDownloadWithNewLinkListener {
+public class DownloadsInProgress extends VDFragment implements DownloadManager1.OnDownloadFinishedListener, DownloadManager1.OnLinkNotFoundListener, OnDownloadWithNewLinkListener {
     private View view;
     private List<DownloadVideo> downloads;
     private RecyclerView downloadsList;
@@ -100,7 +100,7 @@ public class DownloadsInProgress extends VDFragment implements DownloadManager.O
             downloadsStartPauseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Utils.isServiceRunning(DownloadManager.class, getActivity().getApplicationContext())) {
+                    if (Utils.isServiceRunning(DownloadManager1.class, getActivity().getApplicationContext())) {
                         pauseDownload();
                     } else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -116,8 +116,8 @@ public class DownloadsInProgress extends VDFragment implements DownloadManager.O
                 }
             });
 
-            DownloadManager.setOnDownloadFinishedListener(this);
-            DownloadManager.setOnLinkNotFoundListener(this);
+            DownloadManager1.setOnDownloadFinishedListener(this);
+            DownloadManager1.setOnLinkNotFoundListener(this);
         }
 
         return view;
@@ -125,15 +125,15 @@ public class DownloadsInProgress extends VDFragment implements DownloadManager.O
 
     @Override
     public void onDestroyView() {
-        DownloadManager.setOnDownloadFinishedListener(null);
-        DownloadManager.setOnLinkNotFoundListener(null);
+        DownloadManager1.setOnDownloadFinishedListener(null);
+        DownloadManager1.setOnLinkNotFoundListener(null);
         super.onDestroyView();
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        if (Utils.isServiceRunning(DownloadManager.class, getActivity().getApplicationContext())) {
+        if (Utils.isServiceRunning(DownloadManager1.class, getActivity().getApplicationContext())) {
             downloadsStartPauseButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
             getAdapter().unpause();
             tracking.startTracking();
@@ -196,7 +196,7 @@ public class DownloadsInProgress extends VDFragment implements DownloadManager.O
     }
 
     public void pauseDownload() {
-        DownloadManager.stop();
+        DownloadManager1.stop();
 //        Intent downloadService = getVDApp().getDownloadService();
 //        getVDApp().stopService(downloadService);
 //        DownloadManager.stopThread();
@@ -283,7 +283,7 @@ public class DownloadsInProgress extends VDFragment implements DownloadManager.O
     @Override
     public void onDownloadWithNewLink(final DownloadVideo download) {
         Log.i("VDDebug", "download with new link");
-        if (Utils.isServiceRunning(DownloadManager.class, getActivity().getApplicationContext())) {
+        if (Utils.isServiceRunning(DownloadManager1.class, getActivity().getApplicationContext())) {
             pauseDownload();
         }
         getActivity().runOnUiThread(new Runnable() {

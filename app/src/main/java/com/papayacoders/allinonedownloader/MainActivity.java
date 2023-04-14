@@ -1,11 +1,16 @@
 package com.papayacoders.allinonedownloader;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -13,10 +18,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,15 +35,18 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.papayacoders.allinonedownloader.AllDownload.Utils;
 import com.papayacoders.allinonedownloader.browsing_feature.BrowserManager;
+import com.papayacoders.allinonedownloader.download_feature.fragments.DownloadList;
 import com.papayacoders.allinonedownloader.download_feature.fragments.Downloads;
 import com.papayacoders.allinonedownloader.history_feature.History;
 import com.papayacoders.allinonedownloader.utils.AdmobAds;
+import com.papayacoders.allinonedownloader.utils.CustomText;
 import com.papayacoders.allinonedownloader.utils.FbAds;
 import com.papayacoders.allinonedownloader.whatsapp_feature.Whatsapp;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener {
 
     private static final String TAG = "VD_Debug";
     private EditText searchTextBar;
@@ -50,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String adMode;
     private AdmobAds admobAds;
     private FbAds fbAds;
+    Button download;
+    ImageView ivLink;
+    EditText url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         manager = this.getSupportFragmentManager();
         // This is for creating browser manager fragment
-        if ((browserManager = (BrowserManager) this.getSupportFragmentManager().findFragmentByTag("BM")) == null)
-        {
+        if ((browserManager = (BrowserManager) this.getSupportFragmentManager().findFragmentByTag("BM")) == null) {
             manager.beginTransaction()
                     .add(browserManager = new BrowserManager(), "BM").commit();
         }
@@ -78,18 +90,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         toolbar = findViewById(R.id.toolbar);
 
+        download = findViewById(R.id.btnDownload);
+        ivLink = findViewById(R.id.ivLink);
+        url = findViewById(R.id.etURL);
+
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url1 = url.getText().toString();
+                if (url1.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please Enter URL", Toast.LENGTH_SHORT).show();
+                } else {
+                    Utils.INSTANCE.DownloadVideo(MainActivity.this, url1);
+                }
+
+
+            }
+        });
+
+        ivLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                if (clipboard.hasPrimaryClip() && clipboard.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                    // Get the text from the clipboard
+                    ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+                    String pasteData = item.getText().toString();
+
+                    // Paste the text into a TextView
+                    url.setText(pasteData);
+                }
+            }
+        });
+
         setUPBrowserToolbarView();
         setUpVideoSites();
 
         //Set ad fb or admob
-        adMode  = getString(R.string.adMode);
-        if(adMode.equals("0"))
+        adMode = getString(R.string.adMode);
+        if (adMode.equals("0"))
             fbAds = new FbAds(this);
         else
             admobAds = new AdmobAds(this);
     }
 
-    private void setUPBrowserToolbarView(){
+    private void setUPBrowserToolbarView() {
 
         // Toolbar search
         btn_search_cancel = findViewById(R.id.btn_search_cancel);
@@ -101,17 +146,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextWatcher searchViewTextWatcher = new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().trim().length()==0){
+                if (s.toString().trim().length() == 0) {
                     btn_search_cancel.setVisibility(View.GONE);
                 } else {
                     btn_search_cancel.setVisibility(View.VISIBLE);
                 }
             }
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         };
         searchTextBar.addTextChangedListener(searchViewTextWatcher);
         searchTextBar.setOnEditorActionListener(this);
@@ -126,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         settings.setOnClickListener(this);
     }
 
-    private void setUpVideoSites(){
+    private void setUpVideoSites() {
         // Video sites link
         RecyclerView videoSites = findViewById(R.id.rvVideoSitesList);
         videoSites.setLayoutManager(new GridLayoutManager(MainActivity.this, 4));
@@ -155,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_search_cancel:
                 searchTextBar.getText().clear();
                 break;
@@ -163,12 +211,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showToolbar();
                 searchTextBar.getText().clear();
                 getBrowserManager().closeAllWindow();
+                CardView cardView = findViewById(R.id.cardView);
+                cardView.setVisibility(View.VISIBLE);
                 break;
             case R.id.btn_settings:
                 settingsClicked();
                 break;
             case R.id.btn_search:
                 new WebConnect(searchTextBar, this).connect();
+                CardView cardView1 = findViewById(R.id.cardView);
+                cardView1.setVisibility(View.GONE);
                 break;
         }
     }
@@ -184,19 +236,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        if (manager.findFragmentByTag("Downloads") != null ||
+        if (manager.findFragmentByTag("DownloadList") != null ||
                 manager.findFragmentByTag("History") != null ||
-                    manager.findFragmentByTag("Whatsapp") != null) {
+                manager.findFragmentByTag("Whatsapp") != null) {
             VDApp.getInstance().getOnBackPressedListener().onBackpressed();
             browserManager.resumeCurrentWindow();
             navView.setSelectedItemId(R.id.navigation_home);
-        }
-        else if (manager.findFragmentByTag("Settings") != null) {
+        } else if (manager.findFragmentByTag("Settings") != null) {
             VDApp.getInstance().getOnBackPressedListener().onBackpressed();
             browserManager.resumeCurrentWindow();
             navView.setVisibility(View.VISIBLE);
-        }
-        else if (VDApp.getInstance().getOnBackPressedListener() != null) {
+        } else if (VDApp.getInstance().getOnBackPressedListener() != null) {
             VDApp.getInstance().getOnBackPressedListener().onBackpressed();
         } else {
             new AlertDialog.Builder(this)
@@ -243,17 +293,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         browserManager.unhideCurrentWindow();
     }
 
-    private void downloadClicked(){
+    private void downloadClicked() {
         closeHistory();
         closeWhatsapp();
-        if (manager.findFragmentByTag("Downloads") == null) {
-            browserManager.hideCurrentWindow();
-            browserManager.pauseCurrentWindow();
-            manager.beginTransaction().add(R.id.main_content, new Downloads(), "Downloads").commit();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+            if (manager.findFragmentByTag("Downloads") == null) {
+
+                hideToolbar();
+                CardView cardView = findViewById(R.id.cardView);
+                LinearLayout urlLayout = findViewById(R.id.urlLayout);
+                urlLayout.setVisibility(View.GONE);
+                View layout = findViewById(R.id.browser_toolbar);
+                View layout1 = findViewById(R.id.view);
+                cardView.setVisibility(View.GONE);
+                layout.setVisibility(View.GONE);
+                layout1.setVisibility(View.GONE);
+                closeDownloads();
+                closeWhatsapp();
+                browserManager.hideCurrentWindow();
+                browserManager.pauseCurrentWindow();
+                manager.beginTransaction().add(R.id.main_content, new DownloadList(), "Downloads").commit();
+            }
+        } else {
+            if (manager.findFragmentByTag("Downloads") == null) {
+                browserManager.hideCurrentWindow();
+                browserManager.pauseCurrentWindow();
+                manager.beginTransaction().add(R.id.main_content, new Downloads(), "Downloads").commit();
+            }
         }
     }
 
-    public void whatsappClicked(){
+    public void whatsappClicked() {
         closeDownloads();
         closeHistory();
         if (manager.findFragmentByTag("Whatsapp") == null) {
@@ -263,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void historyClicked(){
+    private void historyClicked() {
         closeDownloads();
         closeWhatsapp();
         if (manager.findFragmentByTag("History") == null) {
@@ -273,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void settingsClicked(){
+    private void settingsClicked() {
         if (manager.findFragmentByTag("Settings") == null) {
             browserManager.hideCurrentWindow();
             browserManager.pauseCurrentWindow();
@@ -282,9 +353,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void homeClicked(){
-        browserManager.unhideCurrentWindow();
-        browserManager.resumeCurrentWindow();
+    private void homeClicked() {
+        CardView cardView = findViewById(R.id.cardView);
+        LinearLayout toolbar = findViewById(R.id.toolbar);
+        cardView.setVisibility(View.VISIBLE);
+        LinearLayout urlLayout = findViewById(R.id.urlLayout);
+        urlLayout.setVisibility(View.VISIBLE);
+
+        View layout = findViewById(R.id.browser_toolbar);
+        View layout1 = findViewById(R.id.view);
+        layout.setVisibility(View.GONE);
+        toolbar.setVisibility(View.VISIBLE);
+        layout1.setVisibility(View.VISIBLE);
+        browserManager.hideCurrentWindow();
+        browserManager.pauseCurrentWindow();
         closeDownloads();
         closeHistory();
         closeWhatsapp();
@@ -326,16 +408,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.onRequestPermissionsResultCallback = onRequestPermissionsResultCallback;
     }
 
-    public void hideToolbar(){
+    public void hideToolbar() {
         toolbar.setVisibility(View.GONE);
     }
 
-    public void showToolbar(){
+    public void showToolbar() {
         toolbar.setVisibility(View.VISIBLE);
     }
 
-    public void loadInterstitialAd(){
-        if(adMode.equals("0"))
+    public void loadInterstitialAd() {
+        if (adMode.equals("0"))
             fbAds.loadInterstitialAd();
         else
             admobAds.loadInterstitialAd();
@@ -344,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        CardView cardView = findViewById(R.id.cardView);
-        cardView.setVisibility(View.VISIBLE);
+//        CardView cardView = findViewById(R.id.cardView);
+//        cardView.setVisibility(View.VISIBLE);
     }
 }

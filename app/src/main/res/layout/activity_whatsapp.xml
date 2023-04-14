@@ -30,6 +30,7 @@
             android:layout_height="@dimen/_20sdp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             android:layout_marginEnd="@dimen/_10sdp"
             android:src="@drawable/ic_settings" />
 
@@ -38,6 +39,7 @@
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             android:layout_marginRight="@dimen/_15sdp"
             android:layout_toLeftOf="@+id/ivSetting"
             android:src="@drawable/ic_download" />

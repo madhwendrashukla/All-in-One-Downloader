@@ -3,7 +3,7 @@ package com.papayacoders.allinonedownloader;
 import android.app.Application;
 import android.content.Intent;
 
-import com.papayacoders.allinonedownloader.download_feature.DownloadManager;
+import com.papayacoders.allinonedownloader.download_feature.DownloadManager1;
 
 
 public class VDApp extends Application {
@@ -15,7 +15,7 @@ public class VDApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        downloadService = new Intent(getApplicationContext(), DownloadManager.class);
+        downloadService = new Intent(getApplicationContext(), DownloadManager1.class);
     }
 
     public Intent getDownloadService() {

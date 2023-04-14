@@ -33,7 +33,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
-public class DownloadManager extends IntentService {
+public class DownloadManager1 extends IntentService {
     private static File downloadFile = null;
     private static long prevDownloaded = 0;
     private static long downloadSpeed = 0;
@@ -47,7 +47,7 @@ public class DownloadManager extends IntentService {
     private static boolean stop = false;
     private static Thread downloadThread;
 
-    public DownloadManager() {
+    public DownloadManager1() {
         super("DownloadManager");
     }
 

@@ -70,7 +70,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
 
-
     <string name="APP_ID">ca-app-pub-3940256099942544~3347511713</string>
     <string name="interstitial_ID">ca-app-pub-3940256099942544/1033173712</string>
     <string name="banner_ID">ca-app-pub-3940256099942544/6300978111</string>
@@ -98,5 +97,432 @@
 
     <string name="titleDownload">DOWNLOAD</string>
     <string name="titleSetting">SETTNGS</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-</resources>
+
+
+
+
+        <!--    startapp_app_id-->
+
+        <string name="ironsource_app_id" translatable="false">202196530</string>
+
+        <string name="GOOGLE_PLAY_App_Liscencekey" translatable="false">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn3gBZ90XWD9rfPvoy3qY2OMzCfEVORoRYsD229mDoRUITZQ0kjnBV1EpqUr20xpY/nnQRIBELJK3HQUQ84zCjB44J0IogYo+jWsM6+LYMjtPU1dnTCDwp8VefLrjQ4L3Ri1O9gYiMrZVAh4EZRdbovEdXEkoLc9i0GEZJxfpME8uH6GAPCt/vxUzH///F71usbfnJK4iGUA73WTJlNgYXR9GZzU7qy1e6O58ZOJF8qqrvaeev1VCVJzd2zbJX7GjdEJ5AsQB0qqW/Jr11verR0xNx/fXzatYhilrAPVSdb7CXuNyRSXGyb21PalErj3qZWklsvmib+UxsDNhRio6OQIDAQAB
+</string>
+        <string name="productidcode" translatable="false">noadsid</string>
+
+        <!--    one signal app id-->
+        <string name="onsignalappid" translatable="false">e385f9b8-7af3-4e6e-9bfa-9b8f373de881</string>
+
+        <!--    privacy policy url-->
+        <string name="privacy_policy_url" translatable="false">https://policies.google.com/privacy</string>
+
+
+        <!--    //        Banner 320x50	b195f8dd8ded45fe847ad89ed1d016da-->
+        <!--    //        Medium Rectangle	300x250	252412d5e9364a05ab77d9396346d73d-->
+        <!--    //        Interstitial 320x480	24534e1901884e398f1253216226017e-->
+        <!--    //        Rewarded Ad	N/A	920b6145fb1546cf8b5cf2ac34638bb7-->
+        <!--    //        Rewarded Playable	N/A	15173ac6d3e54c9389b9a5ddca69b34b-->
+        <!--    //        Native N/A 11a17b188668469fb0412708c3d16813-->
+
+        <!--    admob test ads id-->
+
+        <string name="AdmobAppId" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+
+        <string name="MoPubBanner" translatable="false">b195f8dd8ded45fe847ad89ed1d016da</string>
+        <string name="MoPubInterstitial" translatable="false">24534e1901884e398f1253216226017e</string>
+        <string name="MoPubRewardID" translatable="false">920b6145fb1546cf8b5cf2ac34638bb7</string>
+        <string name="MoPubNativeID" translatable="false">11a17b188668469fb0412708c3d16813</string>
+
+        <!--TODO   dont touch below live ads ids-->
+
+        <!--    <string name="AdmobAppId" translatable="false">ca-app-pub-7307921528560396~4213826262</string>-->
+        <!--    <string name="AdmobBanner" translatable="false">ca-app-pub-7307921528560396/9684617120</string>-->
+        <!--    <string name="AdmobInterstitial" translatable="false">ca-app-pub-7307921528560396/8371535451</string>-->
+        <!--    <string name="AdmobAppopenads" translatable="false">ca-app-pub-7307921528560396/1587662928</string>-->
+        <!--    <string name="AdmobRewardID" translatable="false">ca-app-pub-7307921528560396/9907144253</string>-->
+        <!--    <string name="AdmobNativeID" translatable="false">ca-app-pub-7307921528560396/1468627866</string>-->
+
+
+        <!--    new acc-->
+        <!--    <string name="AdmobAppId" translatable="false">ca-app-pub-9243738527809292~4560010891</string>-->
+        <!--    <string name="AdmobBanner" translatable="false">ca-app-pub-9243738527809292/3319597677</string>-->
+        <!--    <string name="AdmobInterstitial" translatable="false">ca-app-pub-9243738527809292/1629938027</string>-->
+        <!--    <string name="AdmobAppopenads" translatable="false">ca-app-pub-9243738527809292/1292149450</string>-->
+        <!--    <string name="AdmobRewardID" translatable="false">ca-app-pub-9243738527809292/3217340101</string>-->
+        <!--    <string name="AdmobNativeID" translatable="false">ca-app-pub-3940256099942544/2247696110</string>-->
+
+
+        <string name="sintony" translatable="false">sintony-regular.otf</string>
+        <string name="developer_email" translatable="false">infusiblecoder@gmail.com</string>
+
+
+        <string name="closwetheapprestart">Error getting purchase info kindly close and restart the app</string>
+
+        <string name="gallery_name">Gallery</string>
+
+        <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
+        <string name="str_developed_with_love">Developed with ❤ in <b>Pakistan</b></string>
+
+
+        <string name="info_permission_denied">Sorry permission denied. We can not open this app on your device, please try again later.</string>
+        <string name="format_request_permision">%1$s will need to have read/write permission your sdcard to save Files.Do you want to grant it?</string>
+
+
+        <string name="SharingVideoSubject">Sharing Downloaded Video</string>
+        <string name="SharingVideoTitle">Sharing Video</string>
+        <string name="SharingVideoBody">Sharing Video File</string>
+        <string name="privacy_message">hello</string>
+
+
+        <string name="RateAppTitle">Like this app?</string>
+        <string name="RateApp">Share the love by rating 5 stars in Play Store. 😘</string>
+        <string name="how_to_download_videos">How to download videos?</string>
+        <string name="share_the_video_to_aio_video_downloader_app_or">• Share the video to All Video Downloader app (or)</string>
+        <string name="simply_copy_the_link_of_any_video">• Simply copy the link of any video</string>
+        <string name="make_sure_auto_download_service_is_running">• Make sure \'Auto Download Service\' is running</string>
+        <string name="paste_video_url_here">Paste Video URL here…</string>
+
+        <string name="options">Options</string>
+        <string name="no_watermark">No Watermark</string>
+        <string name="remove_watermark_from_downloaded_video">Remove watermark from downloaded video</string>
+        <string name="auto_download">Auto Download</string>
+        <string name="simply_copy_the_link_of_video_to_start_download">Simply copy the link of video to start download</string>
+        <string name="currently_supports">Currently Supports</string>
+        <string name="tiktok">TikTok</string>
+        <string name="facebook">Facebook</string>
+        <string name="instagram">Instagram</string>
+        <string name="youtube">Youtube</string>
+        <string name="dailymotion">Dailymotion</string>
+        <string name="twitter">Twitter</string>
+        <string name="viemo">" We collect the minimum amount of information about you that is commensurate with providing you with a satisfactory service. This policy indicates the type of processes that may result in data being collected about you. Your use of this website gives us the right to collect that information. "</string>
+        <string name="message_title">Message Title</string>
+        <string name="message_content">Message Content</string>
+        <string name="auto_download_not_working">Auto Download not working?</string>
+        <string name="make_sure_app_is_running_in_background">• Make sure app is running in the background</string>
+        <string name="restart_the_app_if_that_doesn_t_work">• Restart the app if that doesn\'t work</string>
+        <string name="contact_developer_before_leaving_a_negative_review">• Contact developer before leaving a negative review</string>
+        <string name="author">Author</string>
+        <string name="music_author">Music - Author</string>
+        <string name="description_goes_here">Description Goes Here</string>
+        <string name="starting_download">Starting download…</string>
+        <string name="watch">WATCH</string>
+        <string name="download_fragment">Download</string>
+        <string name="gallery_fragment">Gallery</string>
+        <string name="grant_option">Grant</string>
+        <string name="permission_title">Permission Required!</string>
+        <string name="cancel_option">Cancel</string>
+        <string name="rate_dialog">RATE</string>
+        <string name="later_btn">LATER</string>
+        <string name="auto_download_title_notification">Auto Download Service</string>
+        <string name="auto_download_title_notification_start">Copy the link of video to start download</string>
+        <string name="stop_btn">Stop</string>
+        <string name="restarted_service">Service restarted</string>
+        <string name="downloading_des">Downloading</string>
+        <string name="url_not_suppotr">This url not supported or no media found!</string>
+        <string name="we_cant_allow">We cannot allow to download videos form this website.</string>
+        <string name="genarating_download_link">Generating download link</string>
+        <string name="somthing">Something went wrong!</string>
+        <string name="delete_confirm">Selected video will be permanently deleted. This action cannot be undone. </string>
+        <string name="don_start">Downloading Start!</string>
+        <string name="somth_video_wrong">\"Something went wrong while playing video! Please try again \"</string>
+        <string name="went_shARRE">\"Something went wrong while sharing video! Please try again \"</string>
+        <string name="error_occ">Error occurred!</string>
+        <string name="install_fb">Install facebook app</string>
+        <string name="install_tik">Install Tiktok app</string>
+        <string name="install_ins">Install Instagaram app</string>
+        <string name="enter_valid">Please Enter a valid URI</string>
+        <string name="aio_auto">All Auto Download</string>
+
+
+        <string name="StatusSaver">Status Saver</string>
+        <string name="video_downloader_gallery">Video Downloader Gallery</string>
+        <string name="status_saver_gallery">Status Saver Gallery</string>
+        <string name="appnotinstalled">WhatsApp Is Not Installed Kindly Install It</string>
+        <string name="privacy">PRIVACY POLICY</string>
+        <string name="language">Language</string>
+        <string name="open_whatsapp">Open WhatsApp</string>
+        <string name="privacytxt">Privacy</string>
+
+        <string name="noApp_f">No application found to open this file.</string>
+        <string name="file_del">File was Deleted</string>
+        <string name="are_sure_del">Are you sure you want to delete this file?</string>
+        <string name="del_tit">DELETE?</string>
+        <string name="nn">No</string>
+        <string name="yyy">Yes</string>
+        <string name="vidd">\" video?\"</string>
+        <string name="selected_i">\" Selected\"</string>
+        <string name="choose">Choose</string>
+        <string name="watch_arr">Watch</string>
+        <string name="del_arr">Delete</string>
+        <string name="share_arr">Share</string>
+        <string name="saved_to">\"Saved to: \"</string>
+        <string name="refre">Refreshed!</string>
+        <string name="pernecessory">Permission necessary</string>
+        <string name="write_neesory">Write Storage permission is necessary to Download Images and Videos!!!</string>
+        <string name="yes">Yes</string>
+        <string name="stor_saver">Download</string>
+        <string name="se1">STEP 1</string>
+        <string name="se_2">STEP 2</string>
+        <string name="se_3">STEP 3</string>
+        <string name="tap_wp">Tap to open WhatsApp.</string>
+        <string name="vie_rec">View Recent Stories and Open Status Saver.</string>
+        <string name="dow_sto">Download Stories you want!</string>
+        <string name="invalid_url">Invalid Video URL or Check Internet Connection</string>
+        <string name="savedstt">Download </string>
+        <string name="install_ytd">Install Youtube app</string>
+        <string name="install_twi">Install Twitter app</string>
+        <string name="install_topbuzz">Install Topbuzz app</string>
+        <string name="install_viemoo">Install Vimeo app</string>
+
+
+        <string name="play_video_begin_des">Play video from begin when return to Home Screen</string>
+        <string name="battery_saver">Battery saver</string>
+        <string name="save_battery">Save battery</string>
+        <string name="select_video">Select video</string>
+        <string name="set_up_video_wallpaper">Set up Video Wallpaper</string>
+        <string name="set_wallpaper">Set Wallpaper</string>
+        <string name="sound_on">Sound on</string>
+        <string name="sound_play_begin">Play from begin</string>
+        <string name="open_sound_of_video">Open sound of video</string>
+        <string name="error_emty_video">Error! Chose video</string>
+        <string name="please_select_video">Please select Video</string>
+        <string name="rate_it">OK</string>
+
+        <string name="alert">Alert</string>
+        <string name="cancel">Cancel</string>
+        <string name="txt_exit">Do you want exit?</string>
+        <string name="app_description">Video Live Wallpaper</string>
+        <string name="loading">Loading, . . .</string>
+        <string name="tik_inaspp">Tiktok Inapp View</string>
+
+
+        <string name="open" translatable="false">Open</string>
+        <string name="close" translatable="false">Close</string>
+
+        <string name="rate_app">Rate App</string>
+        <string name="more_apps">More Apps</string>
+        <string name="copy_youtube">Copy</string>
+        <string name="copy_done">Copied</string>
+        <string name="contact_us">Contact Us</string>
+        <string name="about_us">About Us</string>
+        <string name="dashboard">Home</string>
+
+        <!--Privacy Policy , Contact us , About Us -->
+        <string name="about_us_content">Your Info Here</string>
+        <string name="privacy_policy_content" translatable="false">Your Privacy Policy Here </string>
+        <string name="contact_us_content">Your Contact info Here</string>
+
+
+        <!-- GDPR -->
+        <string name="update_consent" translatable="false">Change or revoke consent</string>
+        <string name="publisher_id" translatable="false">pub-123456789</string>
+        <string name="hashtags_copied">Hashtags Copied</string>
+        <string name="ytd_hashtag">Youtube Hastag Genarator</string>
+
+
+        <string name="tags_activity">Tags</string>
+
+        <string name="do_you_want_open_insta">Do you want to open Instagram</string>
+        <string name="btn_no">No</string>
+        <string name="btn_yes">Yes</string>
+        <string name="title_activity_help">Help</string>
+        <string name="title_activity_settings">Settings</string>
+        <string name="setting_label_app_name">Application Name</string>
+        <string name="setting_label_version">Build Version</string>
+        <string name="setting_label_help">Help</string>
+        <string name="setting_title_help">How to use this app?</string>
+        <string name="setting_label_rate">Rate Us</string>
+        <string name="setting_title_rate">Please support us with your positive review</string>
+        <string name="setting_label_share">Share It</string>
+        <string name="setting_title_share">Share our app with your friends and family</string>
+        <string name="setting_label_contact">Contact Us</string>
+        <string name="setting_title_contact">Help us to improve our application</string>
+        <string name="setting_label_privacy">Privacy Policy</string>
+        <string name="setting_title_privacy">Please Check our privacy policy here</string>
+        <string name="share_via">Share via</string>
+        <string name="subject">Subject Here</string>
+        <string name="improvement_title">Feedback</string>
+        <string name="improvement">Tell us where we can improve as soon as possible</string>
+        <string name="submit_btn">Submit</string>
+        <string name="never_btn">Never</string>
+        <string name="rate_later_btn">Not, Now</string>
+        <string name="rate_message">Please, share us how was your experience with us?</string>
+        <string name="update_title">New update available</string>
+        <string name="update_mssg">Check out the latest version available to get the latest features and bug fixes</string>
+        <string name="positive_btn">Update now</string>
+        <string name="negative_btn">Later</string>
+        <string name="btn_copy_open_insta">Copy and open instagram</string>
+        <string name="btn_copy">Copy</string>
+        <string name="btn_rate">RATE</string>
+        <string name="btn_share">SHARE</string>
+        <string name="btn_settings">SETTINGS</string>
+        <string name="big_title_splash">Become more popular and find \n hashtags!</string>
+        <string name="small_title_spalsh">You will know how to be more popular, get more \n organic likes and followers from real people.</string>
+        <string name="btn_star">START</string>
+        <string name="ver">\"Version \"</string>
+        <string name="copydb">Copy database success</string>
+        <string name="dopydb">Copy data error</string>
+        <string name="gallery_fragment_statussaver">Gallery</string>
+        <string name="StatusSaver_gallery">Status Gallery</string>
+        <string name="likee">like</string>
+        <string name="view_more_supported_apps">View More Supported Apps</string>
+        <string name="error_occord_while">Error Occurred While Opening The App, Kindly Open It Manually</string>
+        <string name="open_gallery">Visit Gallery</string>
+        <string name="doyouseead">To Enable Auto-Download You Must Watch An Ad. Do You Want To See One?</string>
+        <string name="watchad">Watch Video Ad</string>
+        <string name="enabAuto">Enable Auto Download</string>
+        <string name="completad">You must watch the complete ad</string>
+        <string name="videofailedload">Rewarded Video Ad Failed To Load</string>
+        <string name="videonotavaliabl">Reward Video Not Available</string>
+        <string name="show_mainwhatsapp">Main WhatsApp Statuses</string>
+        <string name="supported_social_networking_apps">Supported Social Networking Apps</string>
+        <string name="other_supported_apps">Other Supported Apps</string>
+        <string name="ultimately_its_all_about_love_nrate_now">Ultimately Its All About Love\nRate Now</string>
+        <string name="do_you_find_our_new_version_n_more_beautiful_more_playful_amp_more_useful_nif_yes_show_us_your_love">Do You Find Our New Version\n More Beautiful, More Playful &amp; More Useful? \nIf Yes, Show Us Your Love.></string>
+        <string name="not_now">Not Now</string>
+        <string name="rate_us">Rate Us</string>
+        <string name="extrafeatures">Extra Features</string>
+        <string name="show_businesswhatsapp">Show Business Whatsapp</string>
+        <string name="mssg_share">Hey my friend (s) check this amazing application</string>
+        <string name="step_1">STEP 1:</string>
+        <string name="firstly_you_need_to_choose_the_categorie_of_the_tags_that_you_need_to_use_in_your_instagrame_post_or_in_other_social_media">Firstly you need to choose the category of the tags that you need to use in your Instagram post or in other social media</string>
+        <string name="step_2">STEP 2:</string>
+        <string name="_1_then_you_can_choose_the_sub_categorie_that_you_need_to_use">1- Then you can choose the sub categories that you need to use</string>
+        <string name="_2_after_that_copy_the_hashtags_by_click_on_copy_button_or_click_on_copy_38_open_instagram">2- After that copy the hashtags by click on the COPY button or click on COPY &amp; OPEN INSTAGRAM</string>
+        <string name="_3_finaly_past_those_hashtags_on_your_post_and_wait_to_get_the_organic_likes_and_followers">3- Finally past those hashtags on your post and wait to get the organic likes and followers</string>
+        <string name="version_1_0_1" translatable="false">Version %1$s</string>
+        <string name="consent_sdk">Consent SDK</string>
+        <string name="change_the_consent_settings">Change the consent settings!</string>
+        <string name="are_you_sure_you_want_to_exit">Are You Sure You Want To Exit ?</string>
+        <string name="which_video_type_do_you_want_to_download_n_n_note_mp3_files_will_be_located_in_the_app_downloads_folder_it_will_not_be_shown_in_the_gallery_of_the_app_for_now">Which video type do you want to download ? \n\n Note: Mp3 Files Will Be located in the app downloads folder, it will not be shown in the gallery of the app for now</string>
+        <string name="with_watermark">With watermark</string>
+        <string name="without_watermark">Without Watermark</string>
+        <string name="or">OR</string>
+        <string name="download_mp3">Download Mp3</string>
+        <string name="live_video_wallpaper">Live Video Wallpaper</string>
+        <string name="select_a_video_and_make_it_your_live_video_wallpaper">Select A Video And Make It Your Live Video Wallpaper</string>
+        <string name="no_need_to_install_tiktok_app_open_tiktok_here">Run Tiktok In App &amp; Download Videos</string>
+        <string name="youtube_hashtag_genarator">YouTube Hashtag Generator</string>
+        <string name="genarate_the_best_hashtags_for_youtube">Generate The Best Hashtags For Youtube</string>
+        <string name="instagram_hashtags_likes_and_followers">Instagram Hashtags - likes and followers</string>
+        <string name="tool_that_help_you_to_grow_your_profile_get_more_organic_likes_and_followers">The tool that helps you to grow your profile get more organic likes and followers</string>
+        <string name="coming_soon">Coming Soon</string>
+        <string name="more_features_coming_soon">More Features Coming Soon</string>
+        <string name="repost">Repost</string>
+        <string name="send">Send</string>
+        <string name="sharechat">Sharechat</string>
+        <string name="roposo" translatable="false">Roposo</string>
+        <string name="install_sharechat">install sharechat app</string>
+        <string name="topbuzz">TopBuzz</string>
+        <string name="install_roposo">install Roposo</string>
+        <string name="install_likee">install Likee</string>
+        <string name="download_facebook_stories">Download Facebook Stories</string>
+
+        <string name="delete_confirm_image">Selected Image will be permanently deleted. This action cannot be undone.</string>
+        <string name="viewimage">View Image</string>
+        <string name="instaimage">Images</string>
+        <string name="instagram_private_downlaod">Download Instagram Private Media</string>
+        <string name="download_tiktok_video">Download Tiktok Video</string>
+        <string name="earn_money_with_qureka_lite_n_play_quizzes_in_over_25_categories_n_prize_money_upto_rs_1_lac_daily">Earn money with Qureka Lite\n Play quizzes in over 25 categories.\n Prize money upto Rs. 1 Lac daily.</string>
+        <string name="earn_money">Earn Money</string>
+        <string name="bulkdownloader">Bulk Downloader</string>
+        <string name="instagram_bulkdownloaderstring">Download Complete Profiles Of Instagram Users</string>
+        <string name="audios">Audios</string>
+        <string name="preview_not">Preview Not available</string>
+        <string name="SharingimageSubject">Sharing Downloaded Image</string>
+        <string name="SharingimageTitle">Sharing Image</string>
+        <string name="SharingimageBody">Sharing Image File</string>
+        <string name="audio_text"><font color='#FF0400'><i>Audios :</i></font></string>
+        <string name="videos_text"><font color='#FF0400'><i>Videos :</i></font></string>
+        <string name="update_now">Update Now</string>
+        <string name="removeads">Remove Ads</string>
+        <string name="loginfirst">You need to login first to get results</string>
+        <string name="select_quality">Select Quality</string>
+
+        <string name="fb_story">"FBStory Download "</string>
+        <string name="no_fb_story">"Don't want to download stories from Facebook Account "</string>
+        <string name="noprivatedownload">"No Private Download "</string>
+        <string name="no_private_insta">"Don\'t want to download media from private Account "</string>
+        <string name="listandstatus">List &amp; Statuses Of Websites</string>
+        <string name="fb_stories_txt">Fb Stories</string>
+        <string name="no_result_found">No result found</string>
+        <string name="search_a_username">Search for a Username</string>
+        <string name="post">post</string>
+        <string name="followers">followers</string>
+        <string name="followings">followings</string>
+        <string name="cookiesnotvalid">cookie is not valid, try logging in again</string>
+        <string name="loadingfiles">Loading files ....</string>
+        <string name="title">Title</string>
+        <string name="duration">Duration</string>
+        <string name="source">Source</string>
+        <string name="resolution">Resolution</string>
+        <string name="filesize">FileSize</string>
+        <string name="nostoryfound">No insta Story Found</string>
+        <string name="stories">Stories</string>
+        <string name="noresult">No result found</string>
+        <string name="taptoloadmore">Tap to load more</string>
+        <string name="youneedloginfirest">You need to login first to get results</string>
+        <string name="nodeifittakeslonger">Loading.... Note if it takes longer then 1 min close the app and retry</string>
+        <string name="loadingdata">Loading Data, please wait…</string>
+        <string name="play">Play</string>
+        <string name="select_the_desigred_methode_to_download_tiktok_try_the_other_one_if_one_dosent_work">Select the desired method to download tiktok, try the other one if one doesn\'t work</string>
+        <string name="methode_0">Methode 0</string>
+        <string name="methode_1">Methode 1</string>
+        <string name="methode_2">Methode 2</string>
+        <string name="methode_3">Methode 3</string>
+        <string name="methode_4">Methode 4</string>
+        <string name="methode_5">Methode 5</string>
+        <string name="itemowned">Item Owned</string>
+        <string name="adsareremoved">Your ads are removed , make sure to restart the app</string>
+        <string name="purchasedone">Purchase Done</string>
+        <string name="updqteavaliable">New Update Available</string>
+        <string name="update">Update </string>
+        <string name="updateisavaliabledownload"> is available for download.\nBy Downloading the latest update you will get the latest features, improvements and bug fixes </string>
+        <string name="back">Back</string>
+
+        <string name="logininsta">Login</string>
+        <string name="urlisprivate">This Url Is Invalid Or Private Try After Logging In The App</string>
+        <string name="Areyousureyou_download">Are you sure you want to Download this video?</string>
+        <string name="logout">Logout</string>
+        <string name="areyousure_logout">Are you sure you want to Logout?</string>
+        <string name="facebook_private_video_downlaoder">Facebook Private Video Downlaoder</string>
+        <string name="downlaod_facebook_private_video_from_this_section">Downlaod Facebook Private Video From this Section</string>
+        <string name="hdlink">HD link</string>
+        <string name="sdlink">SD link</string>
+        <string name="audioonly">Audio Only</string>
+        <string name="pressagain">Please press again to exit</string>
+        <string name="description_permission">Storage Files Access is needed in order to save your downloaded files and for WhatsApp Status Saver To work, some features may not work if don\'t allow this permission</string>
+        <string name="note_auto_download_feature_only_works_on_android_9_or_below"><b><u>Note:</u></b> Auto-Download Feature Only Works On Android 9 Or Below</string>
+
+
+        <string name="please_wait">Please wait</string>
+        <string name="downloading_new_version">Downloading new version...</string>
+        <string name="download_notification_title">Downloading...</string>
+        <string name="download_notification_description">Downloading new version</string>
+        <string name="please_install">Please install</string>
+        <string name="download_from_store">Download from store</string>
+        <string name="clicktodownload">Click Here To Download</string>
+        <string name="newupdate">New Update!!!!</string>
+        <string name="lotsofnewfeature">Lots of new features!! upgrade to the new version.</string>
+        <string name="android11usermessage">(Compulsory) If you have done it already then CANCEL it. Android 11 or above users will have to download the Android 11 or above version for Whatsapp status saver to work and will have to give a new permission manage storage for Whatsapp status saver to work, so kindly do that.</string>
+        <string name="grantpper">Grant</string>
+        <string name="extract">You Have To Give Apk Install Permission For That</string>
+        <string name="apkinstall">Apk Install</string>
+        <string name="installapp">Install</string>
+        <string name="version">version</string>
+        <string name="methode_6">Methode 6</string>
+        <string name="as_of_the_new_api_update_you_can_use_the_bilk_downloader_only_if_your_account_is_logged_in">As of the new API update you can use the bilk downloader only if your account is logged in</string>
+        <string name="isappfromplaystore">The App Is Not Installed From PlayStore, Kindly Install It Form PlayStore (Make Sure You Uninstall This Version And Reinstall The New One From PlayStore)!!!</string>
+        <string name="useanyway">Use Anyway</string>
+
+        <string name="com_mopub_nativeads_sponsored_by">Sponsored by %s</string>
+
+
+        <string name="notify"> notification</string>
+        <string name="updatefailed">App Update failed, please try again on the next app launch.</string>
+
+    </resources>
+
+

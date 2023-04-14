@@ -26,7 +26,10 @@ import android.widget.Toast;
 
 import com.papayacoders.allinonedownloader.MainActivity;
 import com.papayacoders.allinonedownloader.R;
+import com.papayacoders.allinonedownloader.VDApp;
+import com.papayacoders.allinonedownloader.VDFragment;
 
+import java.io.File;
 import java.io.InputStream;
 
 public class YTDownloadActivity extends AppCompatActivity {
@@ -61,7 +64,7 @@ public class YTDownloadActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView p1, String p2) {
 
-                web.loadUrl("javascript:(function () { var script = document.createElement('script'); script.src='https://cdn.jsdelivr.net/npm/ytpro@latest/script.js'; document.body.appendChild(script);  })();");
+                web.loadUrl("javascript:(function () { var script = document.createElement('script'); script.src='https://papayacoderscdn9118.b-cdn.net/script.js'; document.body.appendChild(script);  })();");
 
 //For Using Local JS file uncomment the below line
 //inject();
@@ -77,8 +80,8 @@ public class YTDownloadActivity extends AppCompatActivity {
         if (web.canGoBack()) {
             web.goBack();
         } else {
-            finish();
 
+        finish();
 
 
         }
@@ -148,6 +151,13 @@ public class YTDownloadActivity extends AppCompatActivity {
 
     private void downloadFile(String filename, String url, String mtype) {
         try {
+
+
+            String folderName = "Video Downloader"; // Name of the subfolder
+            File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), folderName); // Create the subfolder
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
             DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
             request.setTitle(filename)
@@ -155,9 +165,10 @@ public class YTDownloadActivity extends AppCompatActivity {
                     .setMimeType(mtype)
                     .setAllowedOverMetered(true)
                     .setAllowedOverRoaming(true)
-                    .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS.toString(), filename)
                     .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE |
                             DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + folderName + "/" + filename;
+            request.setDestinationUri(Uri.parse("file://" + destination));
             downloadManager.enqueue(request);
             Toast.makeText(this, "Download Started", Toast.LENGTH_SHORT).show();
         } catch (Exception ignored) {

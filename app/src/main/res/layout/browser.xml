@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:src="@drawable/ic_file_download"
+        app:rippleColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -3,6 +3,8 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { url "https://jitpack.io" }
+        jcenter()
     }
 }
 dependencyResolutionManagement {
@@ -10,7 +12,18 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter()
+        maven { url "https://jitpack.io" }
+        flatDir {
+            dirs 'libs'
+        }
+        maven {
+            url 'https://android-sdk.is.com/'
+        }
+
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 }
 rootProject.name = "All In one Downloader"
 include ':app'
+ext.kotlin_version = '1.4.10'
