@@ -24,6 +24,14 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/_10sdp"
             android:src="@drawable/ic_back" />
+        <ImageView
+            android:id="@+id/ivCreation"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:src="@drawable/ic_downloads" />
 
     </RelativeLayout>
 
@@ -36,16 +44,16 @@
         <com.jsibbold.zoomage.ZoomageView
             android:id="@+id/ivPreviewImage"
             android:layout_width="match_parent"
-            app:zoomage_restrictBounds="false"
-            app:zoomage_animateOnReset="true"
-            app:zoomage_autoResetMode="UNDER"
-            app:zoomage_autoCenter="true"
-            app:zoomage_zoomable="true"
-            app:zoomage_translatable="true"
-            app:zoomage_minScale="0.6"
-            app:zoomage_maxScale="8"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:layout_height="match_parent" />
+            app:zoomage_animateOnReset="true"
+            app:zoomage_autoCenter="true"
+            app:zoomage_autoResetMode="UNDER"
+            app:zoomage_maxScale="8"
+            app:zoomage_minScale="0.6"
+            app:zoomage_restrictBounds="false"
+            app:zoomage_translatable="true"
+            app:zoomage_zoomable="true" />
 
         <ImageView
             android:id="@+id/ivPlay"
@@ -65,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            app:use_controller="false"
+            app:use_controller="true"
             tools:ignore="MissingClass" />
 
     </RelativeLayout>

@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:layout_width="match_parent"
@@ -14,15 +15,69 @@
         android:id="@+id/reltool"
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/ivBack"
-            android:layout_width="@dimen/_15sdp"
-            android:layout_height="@dimen/_15sdp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:src="@drawable/ic_back" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="4dp"
+            app:cardCornerRadius="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    style="@style/myTextviewMedium"
+                    android:text="Downloading..."
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:layout_margin="4dp"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_height="wrap_content"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:background="@color/colorPrimary"
+                    android:layout_gravity="center"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:id="@+id/fileName"
+                    android:layout_width="wrap_content"
+                    style="@style/myTextviewMedium"
+                    android:text="Pending..."
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:textSize="@dimen/_11sdp"
+                    android:layout_height="wrap_content"/>
+
+                <SeekBar
+                    android:id="@+id/download_progress_bar"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_centerInParent="true"
+                    android:layout_height="5dp" />
+
+
+
+
+            </LinearLayout>
+
+
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
 
     </RelativeLayout>
 
@@ -63,7 +118,7 @@
                     android:layout_marginRight="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:weightSum="2"
+                    android:weightSum="3"
                     android:layout_height="@dimen/_45sdp">
                     <LinearLayout
                         android:id="@+id/lPhotos"
@@ -106,8 +161,29 @@
                             android:textSize="@dimen/_14sdp"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
+                    <View
+                        android:layout_width="@dimen/_4sdp"
+                        android:background="@drawable/view_green"
+                        android:layout_gravity="center"
+                        android:layout_height="@dimen/_40sdp"/>
 
+                    <LinearLayout
+                        android:id="@+id/lMusic"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_height="match_parent">
 
+                        <TextView
+                            android:id="@+id/txtMusic"
+                            android:layout_width="wrap_content"
+                            style="@style/myTextviewMedium"
+                            android:text="Music"
+                            android:textColor="@color/unseltxt"
+                            android:gravity="center"
+                            android:textSize="@dimen/_14sdp"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -138,6 +214,19 @@
 
                         <View
                             android:id="@+id/vBotomVideo"
+                            android:layout_width="@dimen/_30sdp"
+                            android:background="@drawable/bg_round_white"
+                            android:layout_height="@dimen/_3sdp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+
+                        <View
+                            android:id="@+id/vBotomMusic"
                             android:layout_width="@dimen/_30sdp"
                             android:background="@drawable/bg_round_white"
                             android:layout_height="@dimen/_3sdp"/>
@@ -176,6 +265,7 @@
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
     </LinearLayout>
+
 
 
 </RelativeLayout>

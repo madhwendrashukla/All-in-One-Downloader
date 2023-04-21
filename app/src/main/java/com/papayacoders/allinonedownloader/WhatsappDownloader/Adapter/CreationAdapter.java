@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,12 +58,24 @@ public class CreationAdapter extends RecyclerView.Adapter<CreationAdapter.MyView
                     .asBitmap()
                     .load(strVideoList.get(position).getThumbNail())
                     .into(holder.ivData);
-        } else {
+        } else if (new File(strVideoList.get(position).getVideoPath()).getName().endsWith(".mp3")||new File(strVideoList.get(position).getVideoPath()).getName().endsWith(".m4a")){
+
+            holder.txtTitle.setTextColor(activity.getResources().getColor(R.color.black));
+            holder.txtSize.setTextColor(activity.getResources().getColor(R.color.black));
+            holder.ivData2.setVisibility(View.VISIBLE);
+            holder.ivData.setVisibility(View.GONE);
+            Glide.with(activity)
+                    .asDrawable()
+                    .load(R.drawable.itunes)
+                    .into(holder.ivData2);
+
+        }else {
             holder.ivWhich.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_image));
             Glide.with(activity)
                     .asBitmap()
                     .load(strVideoList.get(position).getVideoPath())
                     .into(holder.ivData);
+
         }
         holder.btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +100,12 @@ public class CreationAdapter extends RecyclerView.Adapter<CreationAdapter.MyView
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strVideoList.get(position).getVideoPath()));
                     intent.setDataAndType(Uri.parse(strVideoList.get(position).getVideoPath()), "video/mp4");
                     activity.startActivity(intent);
-                } else {
+                } else if (new File(strVideoList.get(position).getVideoPath()).getName().endsWith(".mp3")){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strVideoList.get(position).getVideoPath()));
+                    intent.setDataAndType(Uri.parse(strVideoList.get(position).getVideoPath()), "audio/*");
+
+                    activity.startActivity(intent);
+                }else {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strVideoList.get(position).getVideoPath()));
                     intent.setDataAndType(Uri.parse(strVideoList.get(position).getVideoPath()), "image/*");
                     activity.startActivity(intent);
@@ -140,18 +159,21 @@ public class CreationAdapter extends RecyclerView.Adapter<CreationAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivData, btnShare, ivWhich;
+        ImageView ivData ,ivData2, btnShare, ivWhich;
         TextView txtTitle, txtTime, txtSize;
         RelativeLayout relPlay;
+        CardView card ;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             ivData = itemView.findViewById(R.id.ivData);
+            ivData2 = itemView.findViewById(R.id.ivData2);
             txtTitle = itemView.findViewById(R.id.txtTitle);
             txtSize = itemView.findViewById(R.id.txtSize);
             btnShare = itemView.findViewById(R.id.btnShare);
             relPlay = itemView.findViewById(R.id.relPlay);
             ivWhich = itemView.findViewById(R.id.ivWhich);
+            card = itemView.findViewById(R.id.cardView);
 
         }
     }

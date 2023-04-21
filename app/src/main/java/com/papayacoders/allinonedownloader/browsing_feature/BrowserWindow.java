@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
@@ -250,6 +251,8 @@ public class BrowserWindow extends VDFragment implements View.OnClickListener, M
 
                         @Override
                         public void onVideoFound(String size, String type, String link, String name, String page, boolean chunked, String website, boolean audio) {
+//                            if ()
+
                             videoList.addItem(size, type, link, name, page, chunked, website, audio);
                             updateFoundVideosBar();
                         }

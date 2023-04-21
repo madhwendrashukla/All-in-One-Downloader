@@ -17,18 +17,24 @@
         android:icon="@drawable/app_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.AllInOneDownloader"
+        android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="31">
         <activity
+            android:name=".FacebookActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AllDownload.Youtube_dl.InstagramActivity"
+            android:exported="false" />
+        <activity
             android:name=".browsing_feature.YTDownloadActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-            android:hardwareAccelerated="true"
-            android:supportsPictureInPicture="true"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:label="@string/title_activity_ytdownload" />
+            android:hardwareAccelerated="true"
+            android:label="@string/title_activity_ytdownload"
+            android:supportsPictureInPicture="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -44,9 +50,9 @@
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AllInOneDownloader.NoActionbar">
+            android:theme="@style/Theme.AllInOneDownloader.NoActionbar"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -70,7 +76,6 @@
             android:name=".whatsapp_feature.WhatsappStatusView"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-
         <activity
             android:name=".AllDownload.FacebookDownloadCloudBypassWebview_method_1"
             android:screenOrientation="portrait"
@@ -79,18 +84,14 @@
             android:name=".AllDownload.FacebookDownloadCloudBypassWebview_method_2"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-
-
         <activity
             android:name=".WhatsappDownloader.Activity.WhatsappActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-
         <activity
             android:name=".WhatsappDownloader.Activity.CreationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-
         <activity
             android:name=".WhatsappDownloader.Activity.PreviewActivity"
             android:screenOrientation="portrait"
@@ -108,9 +109,6 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />
-
-
-
         </provider>
 
         <meta-data

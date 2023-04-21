@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 
 import com.papayacoders.allinonedownloader.R;
 import com.papayacoders.allinonedownloader.VDFragment;
+import com.papayacoders.allinonedownloader.utils.CustomText;
 import com.papayacoders.allinonedownloader.utils.Utils;
 
 
@@ -64,7 +65,22 @@ public class BrowserManager extends VDFragment {
 
     public void newWindow(String url) {
         if(blockedWebsites.contains(Utils.getBaseDomain(url))){
-
+            Bundle data = new Bundle();
+            data.putString("url", url);
+            BrowserWindow window = new BrowserWindow();
+            window.setArguments(data);
+            getFragmentManager().beginTransaction()
+                    .add(R.id.home_content, window, null)
+                    .commit();
+            windows.add(window);
+            getVDActivity().setOnBackPressedListener(window);
+            if (windows.size() > 1) {
+                window = windows.get(windows.size() - 2);
+                if (window != null && window.getView() != null) {
+                    window.getView().setVisibility(View.GONE);
+                    window.onPause();
+                }
+            }
         }
         else {
             Bundle data = new Bundle();
@@ -104,6 +120,8 @@ public class BrowserManager extends VDFragment {
         } else {
             search_bar.getText().clear();
             getVDActivity().showToolbar();
+            CustomText customText = getVDActivity().findViewById(R.id.tv_app_name);
+            customText.setText(getResources().getString(R.string.app_name));
             getVDActivity().setOnBackPressedListener(null);
             getVDActivity().loadInterstitialAd();
              CardView cardView = getVDActivity().findViewById(R.id.cardView);
@@ -117,6 +135,8 @@ public class BrowserManager extends VDFragment {
                 BrowserWindow window = iterator.next();
                 getFragmentManager().beginTransaction().remove(window).commit();
                 iterator.remove();
+
+
             }
             getVDActivity().setOnBackPressedListener(null);
         }else {
@@ -125,12 +145,15 @@ public class BrowserManager extends VDFragment {
     }
 
     public void hideCurrentWindow() {
-        if (windows.size() > 0) {
-            BrowserWindow topWindow = windows.get(windows.size() - 1);
-            if (topWindow.getView() != null) {
-                topWindow.getView().setVisibility(View.GONE);
+        if (windows != null){
+            if (windows.size() > 0) {
+                BrowserWindow topWindow = windows.get(windows.size() - 1);
+                if (topWindow.getView() != null) {
+                    topWindow.getView().setVisibility(View.GONE);
+                }
             }
         }
+
     }
 
     public void unhideCurrentWindow() {
@@ -149,12 +172,15 @@ public class BrowserManager extends VDFragment {
     }
 
     public void pauseCurrentWindow() {
-        if (windows.size() > 0) {
-            BrowserWindow topWindow = windows.get(windows.size() - 1);
-            if (topWindow.getView() != null) {
-                topWindow.onPause();
+        if (windows!=null){
+            if (windows.size() > 0) {
+                BrowserWindow topWindow = windows.get(windows.size() - 1);
+                if (topWindow.getView() != null) {
+                    topWindow.onPause();
+                }
             }
         }
+
     }
 
     public void resumeCurrentWindow() {

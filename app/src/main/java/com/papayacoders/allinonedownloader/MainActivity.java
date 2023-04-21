@@ -36,7 +36,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.papayacoders.allinonedownloader.AllDownload.Utils;
+import com.papayacoders.allinonedownloader.AllDownload.Youtube_dl.InstagramActivity;
 import com.papayacoders.allinonedownloader.browsing_feature.BrowserManager;
+import com.papayacoders.allinonedownloader.browsing_feature.BrowserWindow;
 import com.papayacoders.allinonedownloader.download_feature.fragments.DownloadList;
 import com.papayacoders.allinonedownloader.download_feature.fragments.Downloads;
 import com.papayacoders.allinonedownloader.history_feature.History;
@@ -45,12 +47,16 @@ import com.papayacoders.allinonedownloader.utils.CustomText;
 import com.papayacoders.allinonedownloader.utils.FbAds;
 import com.papayacoders.allinonedownloader.whatsapp_feature.Whatsapp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener {
 
     private static final String TAG = "VD_Debug";
     private EditText searchTextBar;
     private ImageView btn_search_cancel;
+
     private ImageView btn_search;
     private BrowserManager browserManager;
     private Uri appLinkData;
@@ -63,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button download;
     ImageView ivLink;
     EditText url;
+    ImageView folder;
+    Boolean homeClicked = false;
+    int type = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        type = getIntent().getIntExtra("type", 0);
+
 
         // ATTENTION: This was auto-generated to handle app links.
         Intent appLinkIntent = getIntent();
@@ -89,6 +100,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navView.setItemIconTintList(null);
 
         toolbar = findViewById(R.id.toolbar);
+        folder = findViewById(R.id.downloads);
+        folder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downloadClicked();
+            }
+        });
 
         download = findViewById(R.id.btnDownload);
         ivLink = findViewById(R.id.ivLink);
@@ -100,8 +118,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String url1 = url.getText().toString();
                 if (url1.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please Enter URL", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (url1.contains("instagram.com/")){
+//                    Toast.makeText(MainActivity.this, "insta", Toast.LENGTH_SHORT).show();
+//                    getBrowserManager().newWindow(url1);
+//                    CardView cardView = findViewById(R.id.cardView);
+//                    cardView.setVisibility(View.GONE);
+                    Intent intent =  new Intent(getApplicationContext(), InstagramActivity.class);
+                    intent.putExtra("CopyIntent","instagram.com");
+                    startActivity(intent);
+                }else {
                     Utils.INSTANCE.DownloadVideo(MainActivity.this, url1);
+
                 }
 
 
@@ -125,6 +152,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setUPBrowserToolbarView();
         setUpVideoSites();
+        if (type == 1) {
+            downloadClicked();
+        }
 
         //Set ad fb or admob
         adMode = getString(R.string.adMode);
@@ -236,36 +266,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        if (manager.findFragmentByTag("DownloadList") != null ||
-                manager.findFragmentByTag("History") != null ||
-                manager.findFragmentByTag("Whatsapp") != null) {
-            VDApp.getInstance().getOnBackPressedListener().onBackpressed();
-            browserManager.resumeCurrentWindow();
-            navView.setSelectedItemId(R.id.navigation_home);
-        } else if (manager.findFragmentByTag("Settings") != null) {
-            VDApp.getInstance().getOnBackPressedListener().onBackpressed();
-            browserManager.resumeCurrentWindow();
-            navView.setVisibility(View.VISIBLE);
-        } else if (VDApp.getInstance().getOnBackPressedListener() != null) {
-            VDApp.getInstance().getOnBackPressedListener().onBackpressed();
+        if (type == 1) {
+            finish();
+        } else if (navView.getSelectedItemId() == R.id.navigation_downloads && !homeClicked) {
+            homeClicked = true;
+            homeClicked();
         } else {
-            new AlertDialog.Builder(this)
-                    .setMessage("Are you sure you want to exit?")
-                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.super.onBackPressed();
-                        }
-                    })
-                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+            if (manager.findFragmentByTag("DownloadList") != null ||
+                    manager.findFragmentByTag("History") != null ||
+                    manager.findFragmentByTag("Whatsapp") != null) {
+                VDApp.getInstance().getOnBackPressedListener().onBackpressed();
+                browserManager.resumeCurrentWindow();
+                navView.setSelectedItemId(R.id.navigation_home);
 
-                        }
-                    })
-                    .create()
-                    .show();
+
+            } else if (manager.findFragmentByTag("Settings") != null) {
+                VDApp.getInstance().getOnBackPressedListener().onBackpressed();
+                browserManager.resumeCurrentWindow();
+                navView.setVisibility(View.VISIBLE);
+
+            } else if (VDApp.getInstance().getOnBackPressedListener() != null) {
+                VDApp.getInstance().getOnBackPressedListener().onBackpressed();
+
+            } else {
+
+                new AlertDialog.Builder(this)
+                        .setMessage("Are you sure you want to exit?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                MainActivity.super.onBackPressed();
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .create()
+                        .show();
+            }
         }
+
+
     }
 
     public BrowserManager getBrowserManager() {
@@ -294,34 +338,67 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void downloadClicked() {
-        closeHistory();
-        closeWhatsapp();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        homeClicked = false;
+        if (type == 1) {
 
-            if (manager.findFragmentByTag("Downloads") == null) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-                hideToolbar();
-                CardView cardView = findViewById(R.id.cardView);
-                LinearLayout urlLayout = findViewById(R.id.urlLayout);
-                urlLayout.setVisibility(View.GONE);
-                View layout = findViewById(R.id.browser_toolbar);
-                View layout1 = findViewById(R.id.view);
-                cardView.setVisibility(View.GONE);
-                layout.setVisibility(View.GONE);
-                layout1.setVisibility(View.GONE);
-                closeDownloads();
-                closeWhatsapp();
-                browserManager.hideCurrentWindow();
-                browserManager.pauseCurrentWindow();
-                manager.beginTransaction().add(R.id.main_content, new DownloadList(), "Downloads").commit();
+                if (manager.findFragmentByTag("Downloads") == null) {
+
+                    hideToolbar();
+                    CardView cardView = findViewById(R.id.cardView);
+                    LinearLayout urlLayout = findViewById(R.id.urlLayout);
+                    urlLayout.setVisibility(View.GONE);
+                    View layout = findViewById(R.id.browser_toolbar);
+                    View layout1 = findViewById(R.id.view);
+                    cardView.setVisibility(View.GONE);
+                    layout.setVisibility(View.GONE);
+                    layout1.setVisibility(View.GONE);
+                    closeDownloads();
+                    closeWhatsapp();
+                    browserManager.hideCurrentWindow();
+                    browserManager.pauseCurrentWindow();
+                    manager.beginTransaction().add(R.id.main_content, new DownloadList(), "Downloads").commit();
+                }
+            } else {
+                if (manager.findFragmentByTag("Downloads") == null) {
+                    browserManager.hideCurrentWindow();
+                    browserManager.pauseCurrentWindow();
+                    manager.beginTransaction().add(R.id.main_content, new Downloads(), "Downloads").commit();
+                }
             }
         } else {
-            if (manager.findFragmentByTag("Downloads") == null) {
-                browserManager.hideCurrentWindow();
-                browserManager.pauseCurrentWindow();
-                manager.beginTransaction().add(R.id.main_content, new Downloads(), "Downloads").commit();
+            closeHistory();
+            closeWhatsapp();
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+                if (manager.findFragmentByTag("Downloads") == null) {
+
+                    hideToolbar();
+                    CardView cardView = findViewById(R.id.cardView);
+                    LinearLayout urlLayout = findViewById(R.id.urlLayout);
+                    urlLayout.setVisibility(View.GONE);
+                    View layout = findViewById(R.id.browser_toolbar);
+                    View layout1 = findViewById(R.id.view);
+                    cardView.setVisibility(View.GONE);
+                    layout.setVisibility(View.GONE);
+                    layout1.setVisibility(View.GONE);
+                    closeDownloads();
+                    closeWhatsapp();
+                    browserManager.hideCurrentWindow();
+                    browserManager.pauseCurrentWindow();
+                    manager.beginTransaction().add(R.id.main_content, new DownloadList(), "Downloads").commit();
+                }
+            } else {
+                if (manager.findFragmentByTag("Downloads") == null) {
+                    browserManager.hideCurrentWindow();
+                    browserManager.pauseCurrentWindow();
+                    manager.beginTransaction().add(R.id.main_content, new Downloads(), "Downloads").commit();
+                }
             }
         }
+
+
     }
 
     public void whatsappClicked() {
@@ -354,6 +431,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void homeClicked() {
+
         CardView cardView = findViewById(R.id.cardView);
         LinearLayout toolbar = findViewById(R.id.toolbar);
         cardView.setVisibility(View.VISIBLE);
@@ -392,6 +470,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             manager.beginTransaction().remove(fragment).commit();
         }
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

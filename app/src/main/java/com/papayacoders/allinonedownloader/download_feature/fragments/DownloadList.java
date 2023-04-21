@@ -3,7 +3,10 @@ package com.papayacoders.allinonedownloader.download_feature.fragments;
 import static android.provider.MediaStore.Video.Thumbnails.MINI_KIND;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
@@ -24,7 +27,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -41,22 +48,27 @@ import com.papayacoders.allinonedownloader.WhatsappDownloader.Other.VideoModel;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
-public class DownloadList extends VDFragment implements MainActivity.OnBackPressedListener{
-    ImageView ivBack;
-    LinearLayout lPhotos,lVideos;
-    TextView txtPhotos,txtVideos;
-    View vBotomPhoto,vBotomVideo;
+public class DownloadList extends VDFragment implements MainActivity.OnBackPressedListener {
+//    ImageView ivBack;
+    LinearLayout lPhotos, lVideos, lMusic;
+    TextView txtPhotos, txtVideos, txtMusic;
+    View vBotomPhoto, vBotomVideo, vBottomMusic;
     RecyclerView rvData;
     private TextView txtNodata;
     private ArrayList<VideoModel> strVideoList = new ArrayList<>();
     private ArrayList<VideoModel> strlistImages = new ArrayList<>();
     private ArrayList<VideoModel> strlistVideo = new ArrayList<>();
+
+    private ArrayList<VideoModel> strlistMusic = new ArrayList<>();
     CreationAdapter mCreationAdapter;
     ProgressDialog mPrDialog;
     public SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
     FrameLayout frameBanner;
+    int selected = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,13 +79,14 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
 
         GetMediaVideo video = new GetMediaVideo("");
         video.execute();
+        SeekBar progressBar = view.findViewById(R.id.download_progress_bar);
+        progressBar.setMax(100);
 
         return view;
     }
 
 
-    public void setImageAdapter()
-    {
+    public void setImageAdapter() {
         if (strlistImages.size() == 0) {
             txtNodata.setVisibility(View.VISIBLE);
         } else {
@@ -83,8 +96,8 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
             rvData.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         }
     }
-    public void setVideoAdapter()
-    {
+
+    public void setVideoAdapter() {
         if (strlistVideo.size() == 0) {
             txtNodata.setVisibility(View.VISIBLE);
         } else {
@@ -94,38 +107,56 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
             rvData.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         }
     }
-    public void init(View view)
-    {
-        ivBack=view.findViewById(R.id.ivBack);
-        lPhotos=view.findViewById(R.id.lPhotos);
-        lVideos=view.findViewById(R.id.lVideos);
-        txtPhotos=view.findViewById(R.id.txtPhotos);
-        txtVideos=view.findViewById(R.id.txtVideos);
-        vBotomPhoto=view.findViewById(R.id.vBotomPhoto);
-        vBotomVideo=view.findViewById(R.id.vBotomVideo);
-        rvData=view.findViewById(R.id.rvData);
-        txtNodata=view.findViewById(R.id.txtNoData);
+
+    public void setMusicAdapter() {
+        if (strlistMusic.size() == 0) {
+            txtNodata.setVisibility(View.VISIBLE);
+        } else {
+            txtNodata.setVisibility(View.GONE);
+            mCreationAdapter = new CreationAdapter(getActivity(), strlistMusic);
+            rvData.setAdapter(mCreationAdapter);
+            rvData.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        }
+    }
+
+    public void init(View view) {
+//        ivBack = view.findViewById(R.id.ivBack);
+        lPhotos = view.findViewById(R.id.lPhotos);
+        lVideos = view.findViewById(R.id.lVideos);
+        lMusic = view.findViewById(R.id.lMusic);
+        txtPhotos = view.findViewById(R.id.txtPhotos);
+        txtVideos = view.findViewById(R.id.txtVideos);
+        txtMusic = view.findViewById(R.id.txtMusic);
+        vBotomPhoto = view.findViewById(R.id.vBotomPhoto);
+        vBotomVideo = view.findViewById(R.id.vBotomVideo);
+        vBottomMusic = view.findViewById(R.id.vBotomMusic);
+        rvData = view.findViewById(R.id.rvData);
+        txtNodata = view.findViewById(R.id.txtNoData);
         mPrDialog = new ProgressDialog(getActivity());
         mPrDialog.setMessage("Getting Data..");
         frameBanner = view.findViewById(R.id.frameBanner);
         loadGoogleAdmobBanner();
 
-        ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+//        ivBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
         lPhotos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 txtPhotos.setTextColor(getResources().getColor(R.color.black));
                 txtVideos.setTextColor(getResources().getColor(R.color.unseltxt));
+                txtMusic.setTextColor(getResources().getColor(R.color.unseltxt));
                 vBotomPhoto.setBackground(getResources().getDrawable(R.drawable.bg_round_green));
                 vBotomVideo.setBackground(getResources().getDrawable(R.drawable.bg_round_white));
+                vBottomMusic.setBackground(getResources().getDrawable(R.drawable.bg_round_white));
                 strlistVideo.clear();
                 strVideoList.clear();
+                strlistMusic.clear();
+                selected = 0;
                 GetMediaVideo video = new GetMediaVideo("");
                 video.execute();
 
@@ -138,17 +169,42 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
             public void onClick(View view) {
 
                 txtPhotos.setTextColor(getResources().getColor(R.color.unseltxt));
+                txtMusic.setTextColor(getResources().getColor(R.color.unseltxt));
                 txtVideos.setTextColor(getResources().getColor(R.color.black));
                 vBotomPhoto.setBackground(getResources().getDrawable(R.drawable.bg_round_white));
+                vBottomMusic.setBackground(getResources().getDrawable(R.drawable.bg_round_white));
                 vBotomVideo.setBackground(getResources().getDrawable(R.drawable.bg_round_green));
                 strlistImages.clear();
-//                GetMediaVideo video = new GetMediaVideo("");
-//                video.execute();
+                strlistMusic.clear();
+                selected = 1;
+                GetMediaVideo video = new GetMediaVideo("");
+                video.execute();
 
                 setVideoAdapter();
             }
         });
+        lMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                txtMusic.setTextColor(getResources().getColor(R.color.black));
+                txtPhotos.setTextColor(getResources().getColor(R.color.unseltxt));
+                txtVideos.setTextColor(getResources().getColor(R.color.unseltxt));
+                vBottomMusic.setBackground(getResources().getDrawable(R.drawable.bg_round_green));
+                vBotomVideo.setBackground(getResources().getDrawable(R.drawable.bg_round_white));
+                vBotomPhoto.setBackground(getResources().getDrawable(R.drawable.bg_round_white));
+
+                strlistVideo.clear();
+                strVideoList.clear();
+                strlistImages.clear();
+                selected = 2;
+                GetMediaVideo video = new GetMediaVideo("");
+                video.execute();
+
+                setMusicAdapter();
+            }
+        });
     }
+
     public void loadGoogleAdmobBanner() {
 
         if (frameBanner != null) {
@@ -171,6 +227,7 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
             });
         }
     }
+
     private AdSize getAdSize(Activity activity) {
         Display display = activity.getWindowManager().getDefaultDisplay();
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -200,6 +257,7 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
             super.onPreExecute();
             strlistImages = new ArrayList<>();
             strlistVideo = new ArrayList<>();
+            strlistMusic = new ArrayList<>();
             mPrDialog.show();
         }
 
@@ -216,9 +274,10 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
             File[] files = file.listFiles();
 
             if (files != null) {
+                strlistMusic.clear();
                 for (int i = 0; i < files.length; i++) {
                     File ff = files[i];
-                    if (ff.getName().toLowerCase().endsWith(".jpg") || ff.getName().toLowerCase().endsWith(".png") &&  !ff.getName().toLowerCase().endsWith(".temp")) {
+                    if (ff.getName().toLowerCase().endsWith(".jpg") || ff.getName().toLowerCase().endsWith(".png") && !ff.getName().toLowerCase().endsWith(".temp")) {
                         VideoModel model = new VideoModel();
                         model.setVideoPath(ff.getPath());
                         model.setThumbNail(getThumblineImage(ff.getPath()));
@@ -228,9 +287,7 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
                         model.setDate(simpleDateFormat.format(ff.lastModified()));
                         Log.e("DateVideo--)", "" + model.getDate());
                         strlistImages.add(model);
-                    }
-                    else if (ff.getName().toLowerCase().endsWith(".mp4") )
-                    {
+                    } else if (ff.getName().toLowerCase().endsWith(".mp4")) {
                         VideoModel model = new VideoModel();
                         model.setVideoPath(ff.getPath());
                         model.setThumbNail(getThumblineImage(ff.getPath()));
@@ -240,6 +297,16 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
                         model.setDate(simpleDateFormat.format(ff.lastModified()));
                         Log.e("DateVideo--)", "" + model.getDate());
                         strlistVideo.add(model);
+                    } else if (ff.getName().toLowerCase().endsWith(".mp3")|| ff.getName().toLowerCase().endsWith(".m4a")) {
+                        VideoModel model = new VideoModel();
+                        model.setVideoPath(ff.getPath());
+                        model.setThumbNail(getThumblineImage(ff.getPath()));
+                        model.setVideoFile(ff);
+                        model.setVideoName(ff.getName());
+                        model.setSize(formatFileSize(ff.length()));
+                        model.setDate(simpleDateFormat.format(ff.lastModified()));
+                        Log.e("DateVideo--)", "" + model.getDate());
+                        strlistMusic.add(model);
                     }
                 }
             }
@@ -253,15 +320,25 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
             if (mPrDialog != null && mPrDialog.isShowing()) {
                 mPrDialog.dismiss();
             }
+            if (selected == 0){
+                setImageAdapter();
+            }else if (selected==1){
+                setVideoAdapter();
+            }else if (selected == 2){
+                setMusicAdapter();
+            }
 
-            setImageAdapter();
+
+
         }
 
 
     }
+
     public Bitmap getThumblineImage(String videoPath) {
         return ThumbnailUtils.createVideoThumbnail(videoPath, MINI_KIND);
     }
+
     public static String formatFileSize(long size) {
         String sFileSize = "";
         if (size > 0) {
@@ -293,5 +370,57 @@ public class DownloadList extends VDFragment implements MainActivity.OnBackPress
             return sFileSize + " TB";
         }
         return "0K";
+    }
+
+    private void updateProgressBar(int progress) {
+        SeekBar progressBar = getView().findViewById(R.id.download_progress_bar);
+        progressBar.setProgress(progress);
+    }
+
+    private Timer timer;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(() -> {
+                    DownloadManager downloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+                    DownloadManager.Query query = new DownloadManager.Query();
+                    query.setFilterByStatus(DownloadManager.STATUS_RUNNING);
+                    Cursor cursor = downloadManager.query(query);
+                    if (cursor.moveToFirst()) {
+                        RelativeLayout relTool = getActivity().findViewById(R.id.reltool);
+
+                        relTool.setVisibility(View.VISIBLE);
+                        // There is an ongoing download
+                        long downloadId = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID));
+                        String name = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TITLE));
+                        int bytesDownloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                        int bytesTotal = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                        int progress = (int) (100 * bytesDownloaded / bytesTotal);
+                        updateProgressBar(progress);
+                        TextView fileName = getActivity().findViewById(R.id.fileName);
+                       fileName.setText(name);
+                    } else {
+
+                        // There is no ongoing download
+                        updateProgressBar(0);
+                        RelativeLayout relTool = getActivity().findViewById(R.id.reltool);
+
+                        relTool.setVisibility(View.GONE);
+                    }
+                    cursor.close();
+                });
+            }
+        }, 0, 1000);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        timer.cancel();
     }
 }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.papayacoders.allinonedownloader.WhatsappDownloader.Activity.WhatsappActivity;
 import com.papayacoders.allinonedownloader.browsing_feature.YTDownloadActivity;
+import com.papayacoders.allinonedownloader.utils.CustomText;
 
 
 import java.util.ArrayList;
@@ -121,7 +122,8 @@ public class VideoSitesList extends RecyclerView.Adapter<VideoSitesList.VideoStr
                         search.setText(sites.get(getAdapterPosition()).url);
                         // Start searching
                         activity.getBrowserManager().newWindow(sites.get(getAdapterPosition()).url);
-                        activity.hideToolbar();
+                        CustomText customText = activity.findViewById(R.id.tv_app_name);
+                        customText.setText(sites.get(getAdapterPosition()).title);
                     }
                 }
             });

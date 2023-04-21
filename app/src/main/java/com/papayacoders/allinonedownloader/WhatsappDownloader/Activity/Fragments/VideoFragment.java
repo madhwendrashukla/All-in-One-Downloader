@@ -1,40 +1,38 @@
-package com.papayacoders.allinonedownloader.WhatsappDownloader.Activity;
+package com.papayacoders.allinonedownloader.WhatsappDownloader.Activity.Fragments;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.documentfile.provider.DocumentFile;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Environment;
 import android.os.storage.StorageManager;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.documentfile.provider.DocumentFile;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
-
-import com.google.android.material.tabs.TabLayout;
-import com.papayacoders.allinonedownloader.MainActivity;
 import com.papayacoders.allinonedownloader.R;
-import com.papayacoders.allinonedownloader.WhatsappDownloader.Activity.Fragments.ViewPagerAdapter;
+import com.papayacoders.allinonedownloader.WhatsappDownloader.Activity.PreviewActivity;
+import com.papayacoders.allinonedownloader.WhatsappDownloader.Activity.WhatsappActivity;
 import com.papayacoders.allinonedownloader.WhatsappDownloader.Adapter.ImageAdapter;
 import com.papayacoders.allinonedownloader.WhatsappDownloader.Adapter.VideoAdapter;
 import com.papayacoders.allinonedownloader.WhatsappDownloader.Other.Const;
@@ -42,21 +40,14 @@ import com.papayacoders.allinonedownloader.WhatsappDownloader.Other.FileListClic
 import com.papayacoders.allinonedownloader.WhatsappDownloader.Other.Utils;
 import com.papayacoders.allinonedownloader.WhatsappDownloader.model.StoryModel;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class WhatsappActivity extends AppCompatActivity implements FileListClickInterface {
 
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    ViewPagerAdapter viewPagerAdapter;
-
-    private ImageView ivBack, ivSetting, ivCreation, ivIcon;
-    private LinearLayout lPhotos, lVideos, btnAllow, btnCancel;
-    private TextView txtPhotos, txtVideos, txtNoData, txtToolName;
+public class VideoFragment extends Fragment implements FileListClickInterface {
+    private TextView txtNoData;
     RecyclerView rvData;
     Dialog dailogPermission;
     private View vBotomPhoto, vBotomVideo;
@@ -68,201 +59,48 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
     VideoAdapter mVideoAdapter;
     String which, strQpath, strNormalPath;
     GestureDetector gestureDetector;
+    private LinearLayout lPhotos, lVideos, btnAllow, btnCancel;
     Utils utils;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            Drawable background = getResources().getDrawable(R.drawable.bg_status);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(android.R.color.transparent));
-            window.setNavigationBarColor(getResources().getColor(android.R.color.transparent));
-            window.setBackgroundDrawable(background);
-        }
-        setContentView(R.layout.activity_whatsapp);
-        viewPager = findViewById(R.id.viewPager);
-        tabLayout = findViewById(R.id.tabs);
-
-        viewPagerAdapter = new ViewPagerAdapter(
-                getSupportFragmentManager());
-        viewPager.setAdapter(viewPagerAdapter);
-
-        // It is used to join TabLayout with ViewPager.
-        tabLayout.setupWithViewPager(viewPager);
-
-
-        Intent intent = getIntent();
-        which = intent.getStringExtra("which");
-        init();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = getLayoutInflater().inflate(R.layout.fragment_image, container, false);
+        which = getActivity().getIntent().getStringExtra("which");
+        init(view);
         setDailog();
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-
-            if (which.matches("WA")) {
-                int size = getContentResolver().getPersistedUriPermissions().size();
-                if (size > 0) {
-
-                    String path = getContentResolver().getPersistedUriPermissions().get(0).getUri().getPath();
-
-                    String path2 = "shubh" ;
-
-                    if (size > 1){
-                        path2 = getContentResolver().getPersistedUriPermissions().get(1).getUri().getPath();
-                    }
-
-                    if (path.contains("com.whatsapp/WhatsApp") || path2.contains("com.whatsapp/WhatsApp")) {
-                        if (dailogPermission != null && dailogPermission.isShowing()) {
-                            dailogPermission.dismiss();
-                        }
-                        progressDialog.show();
-                        new LoadAllDataQImages().execute();
-
-                    }else {
-                        if (dailogPermission != null) {
-                            dailogPermission.show();
-                        }
-                    }
-                } else {
-                    if (dailogPermission != null) {
-                        dailogPermission.show();
-                    }
-                }
-            } else {
-                int size = getContentResolver().getPersistedUriPermissions().size();
-
-                if (size > 0) {
-                    String path = getContentResolver().getPersistedUriPermissions().get(0).getUri().getPath();
-                    String path2 = "shubh" ;
-
-                    if (size > 1){
-                        path2 = getContentResolver().getPersistedUriPermissions().get(1).getUri().getPath();
-                    }
-
-
-                    if (path.contains("Business") || path2.contains("Business")) {
-                        if (dailogPermission != null && dailogPermission.isShowing()) {
-                            dailogPermission.dismiss();
-                        }
-                        progressDialog.show();
-                        new LoadAllDataQImages().execute();
-                    } else {
-                        if (dailogPermission != null) {
-                            dailogPermission.show();
-                        }
-                    }
-                } else {
-                    if (dailogPermission != null) {
-                        dailogPermission.show();
-                    }
-                }
+            if (dailogPermission != null && dailogPermission.isShowing()) {
+                dailogPermission.dismiss();
             }
 
+            progressDialog.show();
+            new LoadAllDataQVideos().execute();
         } else {
             progressDialog.show();
-            new LoadAllImageData().execute();
+            new LoadAllVideoData().execute();
         }
 
-
-        ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-//        ivSetting.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(WhatsappActivity.this, SettingActivity.class));
-//            }
-//        });
-
-        ivCreation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(WhatsappActivity.this, "Opening Downloads", Toast.LENGTH_SHORT).show();
-                Intent intent1 = new Intent(getApplicationContext(),MainActivity.class);
-                intent1.putExtra("type",1);
-                startActivity(intent1);
-
-
-
-            }
-        });
-
-        lPhotos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                txtPhotos.setTextColor(getResources().getColor(R.color.black));
-                txtVideos.setTextColor(getResources().getColor(R.color.unseltxt));
-                vBotomPhoto.setBackground(getResources().getDrawable(R.drawable.bg_round_green));
-                vBotomVideo.setBackground(getResources().getDrawable(R.drawable.bg_round_white));
-
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                    if (getContentResolver().getPersistedUriPermissions().size() > 0) {
-                        if (dailogPermission != null && dailogPermission.isShowing()) {
-                            dailogPermission.dismiss();
-                        }
-
-                        progressDialog.show();
-                        new LoadAllDataQImages().execute();
-
-                    } else {
-                        if (dailogPermission != null) {
-                            dailogPermission.show();
-                        }
-                    }
-                } else {
-                    progressDialog.show();
-                    new LoadAllImageData().execute();
-                }
-
-
-            }
-        });
-
-        lVideos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                txtPhotos.setTextColor(getResources().getColor(R.color.unseltxt));
-                txtVideos.setTextColor(getResources().getColor(R.color.black));
-                vBotomPhoto.setBackground(getResources().getDrawable(R.drawable.bg_round_white));
-                vBotomVideo.setBackground(getResources().getDrawable(R.drawable.bg_round_green));
-
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                    if (dailogPermission != null && dailogPermission.isShowing()) {
-                        dailogPermission.dismiss();
-                    }
-
-                    progressDialog.show();
-                    new LoadAllDataQVideos().execute();
-                } else {
-                    progressDialog.show();
-                    new LoadAllVideoData().execute();
-                }
-
-
-            }
-        });
+        return view;
     }
+
 
     private void setDailog() {
 
-        dailogPermission = new Dialog(WhatsappActivity.this, R.style.WideDialog);
+        dailogPermission = new Dialog(getContext(), R.style.WideDialog);
         dailogPermission.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dailogPermission.setCanceledOnTouchOutside(false);
         dailogPermission.setCancelable(false);
         dailogPermission.setContentView(R.layout.dialog_permission);
         dailogPermission.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        progressDialog = new ProgressDialog(WhatsappActivity.this, R.style.AppCompatAlertDialogStyle);
+        progressDialog = new ProgressDialog(getContext(), R.style.AppCompatAlertDialogStyle);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("Loading Status. Please wait...");
-        progressDialog.dismiss();
         progressDialog.setIndeterminate(true);
         progressDialog.setCanceledOnTouchOutside(false);
 
@@ -283,7 +121,7 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
                 }
 
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                    StorageManager sm = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
+                    StorageManager sm = (StorageManager) getContext().getSystemService(Context.STORAGE_SERVICE);
                     Intent intent = sm.getPrimaryStorageVolume().createOpenDocumentTreeIntent();
                     String startDir = strQpath;
                     Uri uri = intent.getParcelableExtra("android.provider.extra.INITIAL_URI");
@@ -300,36 +138,25 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
         });
     }
 
-    public void init() {
-        utils = new Utils(WhatsappActivity.this);
-        ivBack = findViewById(R.id.ivBack);
-        ivSetting = findViewById(R.id.ivSetting);
-        ivCreation = findViewById(R.id.ivCreation);
-        lPhotos = findViewById(R.id.lPhotos);
-        lVideos = findViewById(R.id.lVideos);
-        txtPhotos = findViewById(R.id.txtPhotos);
-        rvData = findViewById(R.id.rvData);
-        txtVideos = findViewById(R.id.txtVideos);
-        txtNoData = findViewById(R.id.txtNoData);
-        vBotomPhoto = findViewById(R.id.vBotomPhoto);
-        vBotomVideo = findViewById(R.id.vBotomVideo);
-        ivIcon = findViewById(R.id.ivIcon);
-        txtToolName = findViewById(R.id.txtToolName);
+    public void init(View view) {
+        utils = new Utils((Activity) getContext());
+
+
+        rvData = view.findViewById(R.id.rvData);
+
+        txtNoData = view.findViewById(R.id.txtNoData);
 
 
         if (which.matches("WA")) {
             strQpath = "Android%2Fmedia%2Fcom.whatsapp%2FWhatsApp%2FMedia%2F.Statuses";
             strNormalPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/WhatsApp/Media/.Statuses";
 
-            ivIcon.setImageDrawable(getResources().getDrawable(R.drawable.iv_wp_shadow));
-            txtToolName.setText(getResources().getString(R.string.titleWhatsapp));
+
         } else {
             strQpath = "Android%2Fmedia%2Fcom.whatsapp.w4b%2FWhatsApp Business%2FMedia%2F.Statuses";
             strNormalPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/WhatsApp Business/Media/.Statuses";
 
 
-            ivIcon.setImageDrawable(getResources().getDrawable(R.drawable.iv_wb_shadow));
-            txtToolName.setText(getResources().getString(R.string.titleWB));
         }
     }
 
@@ -340,30 +167,30 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
             if (fileArrayImages.size() == 0) {
                 txtNoData.setVisibility(View.VISIBLE);
             } else {
-                mImageAdapter = new ImageAdapter(WhatsappActivity.this, fileArrayImages, WhatsappActivity.this);
+                mImageAdapter = new ImageAdapter((Activity) getContext(), fileArrayImages, this);
                 txtNoData.setVisibility(View.GONE);
                 rvData.setAdapter(mImageAdapter);
-                rvData.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+                rvData.setLayoutManager(new GridLayoutManager(getContext(), 3));
             }
-        }else {
+        } else {
 
             if (which.matches("WA")) {
                 if (fileArrayImages.size() == 0) {
                     txtNoData.setVisibility(View.VISIBLE);
                 } else {
                     txtNoData.setVisibility(View.GONE);
-                    mImageAdapter = new ImageAdapter(WhatsappActivity.this, getWAData(), WhatsappActivity.this);
+                    mImageAdapter = new ImageAdapter((Activity) getContext(), fileArrayImages, this);
                     rvData.setAdapter(mImageAdapter);
-                    rvData.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+                    rvData.setLayoutManager(new GridLayoutManager(getContext(), 3));
                 }
             } else {
                 if (fileArrayImages.size() == 0) {
                     txtNoData.setVisibility(View.VISIBLE);
                 } else {
                     txtNoData.setVisibility(View.GONE);
-                    mImageAdapter = new ImageAdapter(WhatsappActivity.this, getWBData(), WhatsappActivity.this);
+                    mImageAdapter = new ImageAdapter((Activity) getContext(), fileArrayImages, this);
                     rvData.setAdapter(mImageAdapter);
-                    rvData.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+                    rvData.setLayoutManager(new GridLayoutManager(getContext(), 3));
                 }
             }
 
@@ -371,13 +198,13 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
     }
 
     public void setVideoAdapter() {
-        mVideoAdapter = new VideoAdapter(WhatsappActivity.this, fileArrayVideos, WhatsappActivity.this);
+        mVideoAdapter = new VideoAdapter((Activity) getContext(), fileArrayVideos, this);
         if (fileArrayVideos.size() == 0) {
             txtNoData.setVisibility(View.VISIBLE);
         } else {
             txtNoData.setVisibility(View.GONE);
             rvData.setAdapter(mVideoAdapter);
-            rvData.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+            rvData.setLayoutManager(new GridLayoutManager(getContext(), 3));
         }
     }
 
@@ -395,7 +222,7 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
                     utils.setWBUri(dataUri.toString());
                 }
                 if (dataUri.toString().contains(".Statuses")) {
-                    getContentResolver().takePersistableUriPermission(dataUri,
+                    getContext().getContentResolver().takePersistableUriPermission(dataUri,
                             Intent.FLAG_GRANT_READ_URI_PERMISSION |
                                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     progressDialog.show();
@@ -403,7 +230,7 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
                         new LoadAllDataQImages().execute();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.txtWrongfolder), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.txtWrongfolder), Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -419,7 +246,7 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
         String path = fileArrayImages.get(position).toString();
 
         Log.e("pathImage--)", "" + path);
-        Intent intent = new Intent(WhatsappActivity.this, PreviewActivity.class);
+        Intent intent = new Intent(getContext(), PreviewActivity.class);
         intent.putExtra("preview", path);
         intent.putExtra("filePath", fileArrayImages.get(position).getPath());
         startActivity(intent);
@@ -429,7 +256,7 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
     public void getVideoPosition(int position) {
         String path = fileArrayVideos.get(position).toString();
         Log.e("pathVideo--)", "" + path);
-        Intent intent = new Intent(WhatsappActivity.this, PreviewActivity.class);
+        Intent intent = new Intent(getContext(), PreviewActivity.class);
         intent.putExtra("preview", path);
         intent.putExtra("filePath", fileArrayVideos.get(position).getPath());
         startActivity(intent);
@@ -450,10 +277,10 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
             try {
                 if (which.matches("WA")) {
                     Uri uriParse = Uri.parse(utils.getWAUri());
-                    documentFile = DocumentFile.fromTreeUri(WhatsappActivity.this, uriParse);
+                    documentFile = DocumentFile.fromTreeUri(getContext(), uriParse);
                 } else {
                     Uri uriParse = Uri.parse(utils.getWBUri());
-                    documentFile = DocumentFile.fromTreeUri(WhatsappActivity.this, uriParse);
+                    documentFile = DocumentFile.fromTreeUri(getContext(), uriParse);
                 }
 
                 for (DocumentFile file : documentFile.listFiles()) {
@@ -501,7 +328,7 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
         @Override
         protected String doInBackground(String... furl) {
             fileArrayVideos.clear();
-            DocumentFile documentFile = DocumentFile.fromTreeUri(WhatsappActivity.this, getContentResolver().getPersistedUriPermissions().get(0).getUri());
+            DocumentFile documentFile = DocumentFile.fromTreeUri(getContext(), getContext().getContentResolver().getPersistedUriPermissions().get(0).getUri());
             for (DocumentFile file : documentFile.listFiles()) {
                 if (file.isDirectory()) {
 
@@ -691,8 +518,8 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
                     }
 
                 });
-            } catch(Exception e) {
-                Log.d("SHUBH", "getData: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("SHUBH", "getData: " + e.getMessage());
             }
 
             for (int i = 0; i < files.length; i++) {
@@ -757,8 +584,8 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
                     }
 
                 });
-            } catch(Exception e) {
-                Log.d("SHUBH", "getData: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("SHUBH", "getData: " + e.getMessage());
             }
 
             for (int i = 0; i < files.length; i++) {
@@ -784,7 +611,6 @@ public class WhatsappActivity extends AppCompatActivity implements FileListClick
 
         return fileArrayImages;
     }
-
 
 
 }

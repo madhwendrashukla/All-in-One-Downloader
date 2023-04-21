@@ -20,7 +20,9 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,27 +31,22 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.facebook.ads.AdError;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.Player;
+
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-
-import com.google.android.exoplayer2.source.LoopingMediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-
+import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -63,6 +60,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.common.ConnectionResult;
 
+import com.papayacoders.allinonedownloader.MainActivity;
 import com.papayacoders.allinonedownloader.R;
 
 import java.io.File;
@@ -79,18 +77,20 @@ public class PreviewActivity extends AppCompatActivity {
     private LinearLayout lWhatsapp, lDownload, lShare;
     String previewUrl, outPutSave;
     String fileName = null;
+    Boolean isPause = false;
     ProgressDialog mPrDialog;
     String actionType = "Download", contentType = null;
     InterstitialAd mInterstitialAd;
     FrameLayout frameBanner;
-    //    VideoView videoView;
-    PlayerView simpleExoPlayerView;
-
-    // Zoom img
-//    private ScaleGestureDetector scaleGestureDetector;
-//    private float FACTOR = 1.0f;
+    private SimpleExoPlayer player;
+    private PlayerView playerView;
+    private MediaSource mediaSource;
+    private boolean playWhenReady = true;
+    private int currentWindow = 0;
+    private long playbackPosition = 0;
 
     private int position = 0;
+    private  ImageView downloads;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,21 @@ public class PreviewActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         previewUrl = intent.getStringExtra("preview");
+
+        playerView = findViewById(R.id.video_view);
+        downloads = findViewById(R.id.ivCreation);
+        mediaSource = buildMediaSource(Uri.parse(previewUrl));
         init();
+
+        downloads.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PreviewActivity.this, "Opening Downloads", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                intent1.putExtra("type",1);
+                startActivity(intent1);
+            }
+        });
 
         ivBack.setOnClickListener(view -> finish());
 
@@ -122,7 +136,6 @@ public class PreviewActivity extends AppCompatActivity {
     }
 
     public void init() {
-//        videoView = findViewById(R.id.videoView);
         ivBack = findViewById(R.id.ivBack);
         ivPreviewImage = findViewById(R.id.ivPreviewImage);
         ivPlay = findViewById(R.id.ivPlay);
@@ -159,25 +172,29 @@ public class PreviewActivity extends AppCompatActivity {
         if (previewUrl.endsWith(".mp4")) {
             contentType = "VIDEO";
             ivPlay.setVisibility(View.VISIBLE);
-//            simpleExoPlayerView.setVisibility(View.GONE);
-//            initplayer();
+            playerView.setVisibility(View.VISIBLE);
+
         } else {
             contentType = "IMAGE";
             ivPlay.setVisibility(View.GONE);
-//            simpleExoPlayerView.setVisibility(View.GONE);
+            playerView.setVisibility(View.GONE);
+
         }
 
-//        simpleExoPlayerView.setOnClickListener(v -> {
+        playerView.setOnClickListener(v -> {
 //            if (isPause){
-//                pausePlayer();
-//            }else
+//                Toast.makeText(this, "paused", Toast.LENGTH_SHORT).show();
 //                startPlayer();
-//        });
+//
+//            }else
+//                Toast.makeText(this, "resume", Toast.LENGTH_SHORT).show();
+//                pausePlayer();
+        });
 
         ivPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+//
 //                if (isPause){
 //                    pausePlayer();
 //                }else
@@ -693,133 +710,101 @@ public class PreviewActivity extends AppCompatActivity {
 //    }
 
     private boolean firstcall = true;
-    private PlayerView player;
+
     public Boolean playing;
 
+    public void onResume() {
+        super.onResume();
+        hideSystemUi();
+        if ((Util.SDK_INT < 24 || player == null)) {
+            initializePlayer();
+        }
+    }
 
-//    private void initplayer() {
-//        ivPreviewImage.setVisibility(View.GONE);
-//        this.firstcall = false;
-//        Uri parse = Uri.parse(previewUrl);
-//        player = ExoPlayerFactory.newSimpleInstance(this, new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(new DefaultBandwidthMeter())));
-//        this.simpleExoPlayerView = findViewById(R.id.video_view);
-//        this.simpleExoPlayerView.setPlayer(this.player);
-//        ExtractorMediaSource extractorMediaSource = new ExtractorMediaSource(parse, new DefaultDataSourceFactory(this, Util.getUserAgent(this, "CloudinaryExoplayer")), new DefaultExtractorsFactory(), null, null);
-//        this.player.prepare(new LoopingMediaSource(extractorMediaSource));
-//        this.player.setPlayWhenReady(true);
-////        this.exo_play.setVisibility(View.GONE);
-//        this.simpleExoPlayerView.setControllerShowTimeoutMs(ConnectionResult.DRIVE_EXTERNAL_STORAGE_REQUIRED);
-//
-////        pausePlayer();
-//        this.player.addListener(new Player.EventListener() {
-//            public void onLoadingChanged(boolean z) {
-//            }
-//
-//            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-//            }
-//
-//            public void onPlayerError(ExoPlaybackException exoPlaybackException) {
-//            }
-//
-//            public void onPositionDiscontinuity(int i) {
-//            }
-//
-//            public void onRepeatModeChanged(int i) {
-//            }
-//
-//
-//            public void onShuffleModeEnabledChanged(boolean z) {
-//            }
-//
-//            public void onTimelineChanged(Timeline timeline, Object obj, int i) {
-//            }
-//
-//            public void onTracksChanged(TrackGroupArray trackGroupArray, TrackSelectionArray trackSelectionArray) {
-//            }
-//
-//            public void onPlayerStateChanged(boolean z, int i) {
-//                if (i == 3) {
-//                    try {
-////                        loader.setVisibility(View.GONE);
-//                        simpleExoPlayerView.setVisibility(View.VISIBLE);
-////                        exo_play.setVisibility(View.GONE);
-//                        playing = Boolean.valueOf(true);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        return;
-//                    }
-//                }
-//                if (i == 2) {
-////                    loader.setVisibility(View.VISIBLE);
-//                    simpleExoPlayerView.setVisibility(View.GONE);
-//                }
-//            }
-//        });
-//    }
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            releaseplayer();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-//    public void onResume() {
-//        super.onResume();
-//        try {
-//            if (this.player == null && this.playing.booleanValue()) {
-//                initplayer();
-//            }
-//        } catch (Exception e) {
-////            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    public void onDestroy() {
-//        super.onDestroy();
-//        try {
-//            releaseplayer();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    public void onPause() {
-//        super.onPause();
-//        try {
-//            releaseplayer();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-////    private void releaseplayer() {
-////        try {
-////            SimpleExoPlayer simpleExoPlayer = this.player;
-////            if (simpleExoPlayer != null) {
-////                simpleExoPlayer.release();
-////                this.player = null;
-////                //            this.trackSelector = null;
-////            }
-////        } catch (Exception e) {
-////            throw new RuntimeException(e);
-////        }
-////    }
-//
-//    public void onStop() {
-//        super.onStop();
-//        try {
-//            releaseplayer();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    Boolean isPause = false;
-//
-//    private void pausePlayer() {
-//        isPause = true;
-//        player.setPlayWhenReady(false);
-//        player.getPlaybackState();
-//    }
-//
-//    private void startPlayer() {
-//        isPause = false;
-//        player.setPlayWhenReady(true);
-//        player.getPlaybackState();
-//    }
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT < 24) {
+            releasePlayer();
+        }
+    }
 
+    private void releaseplayer() {
+        try {
+            SimpleExoPlayer simpleExoPlayer = this.player;
+            if (simpleExoPlayer != null) {
+                simpleExoPlayer.release();
+                this.player = null;
+                //            this.trackSelector = null;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT >= 24) {
+            releasePlayer();
+        }
+    }
+
+
+
+    private void pausePlayer() {
+        isPause = true;
+        player.setPlayWhenReady(false);
+        player.getPlaybackState();
+    }
+
+    private void startPlayer() {
+        isPause = false;
+        player.setPlayWhenReady(true);
+        player.getPlaybackState();
+    }
+    private MediaSource buildMediaSource(Uri uri) {
+        return new ProgressiveMediaSource.Factory(
+                new DefaultDataSourceFactory(this, "exoplayer-demo"))
+                .createMediaSource(uri);
+    }
+    private void hideSystemUi() {
+        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+    private void initializePlayer() {
+        player = new SimpleExoPlayer.Builder(this).build();
+        playerView.setPlayer(player);
+        player.setPlayWhenReady(playWhenReady);
+        player.seekTo(currentWindow, playbackPosition);
+        player.prepare(mediaSource);
+    }
+    private void releasePlayer() {
+        if (player != null) {
+            playWhenReady = player.getPlayWhenReady();
+            playbackPosition = player.getCurrentPosition();
+            currentWindow = player.getCurrentWindowIndex();
+            player.release();
+            player = null;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (Util.SDK_INT >= 24) {
+            initializePlayer();
+        }
+    }
 }

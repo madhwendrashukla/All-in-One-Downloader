@@ -200,6 +200,8 @@ public abstract class VideoContentSearch extends Thread {
                     audio = true;
                 }
             }else if (host.contains("instagram.com")) {
+
+
                 try {
                     MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                     retriever.setDataSource(link, new HashMap<String, String>());

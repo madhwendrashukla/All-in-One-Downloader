@@ -267,7 +267,7 @@ public abstract class VideoList {
                     Toast.makeText(activity, "Downloading video file...", Toast.LENGTH_SHORT).show();
                     // Set the destination directory for the downloaded file
 //                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS + File.separator + folderName  , "madh.mp4");
-                    String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + folderName + "/" + filename;
+                    String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + folderName + "/" + filename+".mp4";
                     request.setDestinationUri(Uri.parse("file://" + destination));
                     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                     downloadManager.enqueue(request);

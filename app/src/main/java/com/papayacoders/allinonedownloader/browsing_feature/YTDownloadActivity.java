@@ -24,6 +24,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.papayacoders.allinonedownloader.MainActivity;
 import com.papayacoders.allinonedownloader.R;
 import com.papayacoders.allinonedownloader.VDApp;
@@ -35,12 +36,20 @@ import java.io.InputStream;
 public class YTDownloadActivity extends AppCompatActivity {
     private WebView web;
     private Intent i = new Intent();
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ytdownload);
+        fab = findViewById(R.id.videosFoundHUD);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         web = findViewById(R.id.web);
         web.getSettings().setJavaScriptEnabled(true);
